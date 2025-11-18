@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { LLMRegistryClient } from '@llm-dev-ops/llm-registry-sdk';
+import { LLMRegistryClient, Model, Asset } from '@llm-dev-ops/llm-registry-sdk';
 import chalk from 'chalk';
 import ora from 'ora';
 import { table } from 'table';
@@ -104,7 +104,7 @@ models
 
       const data = [
         ['ID', 'Name', 'Version', 'Provider', 'Created'],
-        ...modelList.map(m => [
+        ...modelList.map((m: Model) => [
           m.id.substring(0, 8),
           m.name,
           m.version,
@@ -219,7 +219,7 @@ assets
 
       const data = [
         ['ID', 'Name', 'Version', 'Type', 'Size', 'Created'],
-        ...assetList.map(a => [
+        ...assetList.map((a: Asset) => [
           a.id.substring(0, 8),
           a.name,
           a.version,

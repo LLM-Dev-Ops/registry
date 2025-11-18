@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces",
+    "build": "npm run build -w packages/sdk && npm run build -w packages/cli",
     "clean": "npm run clean --workspaces",
     "test": "npm run test --workspaces",
     "publish:sdk": "cd packages/sdk && npm publish",

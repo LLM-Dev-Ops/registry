@@ -42,7 +42,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@llm-dev-ops/llm-registry-sdk": "^0.1.0",
+    "@llm-dev-ops/llm-registry-sdk": "file:../sdk",
     "commander": "^11.1.0",
     "chalk": "^4.1.2",
     "ora": "^5.4.1",
