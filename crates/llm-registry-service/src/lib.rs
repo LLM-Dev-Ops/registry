@@ -65,6 +65,9 @@ pub mod search;
 pub mod validation;
 pub mod versioning;
 
+// LLM-Dev-Ops upstream integration adapters (Phase 2B)
+pub mod adapters;
+
 // Re-export main types for convenience
 pub use dto::*;
 pub use error::{ServiceError, ServiceResult};
@@ -75,6 +78,11 @@ pub use registration::{DefaultRegistrationService, RegistrationService};
 pub use search::{DefaultSearchService, SearchService};
 pub use validation::{DefaultValidationService, ValidationService};
 pub use versioning::{DefaultVersioningService, VersioningService};
+
+// Re-export upstream adapters for convenience
+pub use adapters::{
+    ConfigManagerAdapter, ObservatoryAdapter, SchemaRegistryAdapter,
+};
 
 use llm_registry_db::{AssetRepository, EventStore};
 use std::sync::Arc;

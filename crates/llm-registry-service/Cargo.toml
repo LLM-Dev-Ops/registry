@@ -17,6 +17,11 @@ description = "Business logic and service layer for the LLM Registry - Model man
 llm-registry-core = { version = "0.1.0", path = "../llm-registry-core" }
 llm-registry-db = { version = "0.1.0", path = "../llm-registry-db" }
 
+# LLM-Dev-Ops upstream dependencies (Phase 2B - runtime consumption)
+schema-registry-core = { workspace = true }
+llm-config-core = { workspace = true }
+llm-observatory-core = { workspace = true }
+
 # Async runtime and traits
 async-trait = "0.1"
 tokio = { version = "1.35", features = ["full"] }

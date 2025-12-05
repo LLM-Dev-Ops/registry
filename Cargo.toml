@@ -133,6 +133,11 @@ criterion = "0.5"
 # Security
 secrecy = { version = "0.8", features = ["serde"] }
 
+# LLM-Dev-Ops upstream dependencies (Phase 2A - compile-time only)
+schema-registry-core = "0.1.0"
+llm-config-core = "0.5.0"
+llm-observatory-core = "0.1.1"
+
 [profile.release]
 opt-level = 3
 lto = "fat"
