@@ -14,6 +14,9 @@ packages/*/node_modules/
 
 # Claude Code
 .claude-flow/
+.claude/
+.mcp.json
+CLAUDE.md
 
 # Environment
 .env
