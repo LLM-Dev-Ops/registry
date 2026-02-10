@@ -11,6 +11,7 @@ use axum::{
 use crate::{
     auth::{optional_auth, require_auth, AuthState},
     auth_handlers::{generate_api_key, login, logout, me, refresh_token, AuthHandlerState},
+    execution_middleware::require_execution_context,
     graphql::{build_schema, graphql_handler, graphql_playground},
     handlers::{
         delete_asset, get_asset, get_dependencies, get_dependents, health_check, list_assets,
@@ -133,6 +134,9 @@ pub fn build_router_with_graphql(
 }
 
 /// Build v1 API routes
+///
+/// All v1 routes require an execution context (X-Execution-Id and
+/// X-Parent-Span-Id headers) enforced by the execution middleware.
 fn build_v1_routes() -> Router<AppState> {
     Router::new()
         // Asset management
@@ -144,6 +148,9 @@ fn build_v1_routes() -> Router<AppState> {
         // Dependencies
         .route("/assets/{id}/dependencies", get(get_dependencies))
         .route("/assets/{id}/dependents", get(get_dependents))
+        // Execution context middleware — rejects requests without valid
+        // X-Execution-Id and X-Parent-Span-Id headers.
+        .layer(middleware::from_fn(require_execution_context))
 }
 
 /// Route configuration

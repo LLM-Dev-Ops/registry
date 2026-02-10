@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { LLMRegistryClient, Model, Asset } from '@llm-dev-ops/llm-registry-sdk';
+import { LLMRegistryClient, Model, Asset, ExecutionContext } from '@llm-dev-ops/llm-registry-sdk';
 import chalk from 'chalk';
 import ora from 'ora';
 import { table } from 'table';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as crypto from 'crypto';
 
 const program = new Command();
 
@@ -36,6 +37,21 @@ function loadConfig(): Config {
   };
 }
 
+// Build execution context from global CLI options or environment
+function buildExecutionContext(): ExecutionContext | undefined {
+  const opts = program.opts();
+  const executionId = opts.executionId || process.env.LLM_REGISTRY_EXECUTION_ID;
+  const parentSpanId = opts.parentSpanId || process.env.LLM_REGISTRY_PARENT_SPAN_ID;
+
+  if (executionId) {
+    return {
+      executionId,
+      parentSpanId: parentSpanId || crypto.randomUUID().replace(/-/g, '').toUpperCase().slice(0, 26),
+    };
+  }
+  return undefined;
+}
+
 // Get client instance
 function getClient(): LLMRegistryClient {
   const cfg = loadConfig();
@@ -46,13 +62,16 @@ function getClient(): LLMRegistryClient {
   return new LLMRegistryClient({
     baseURL: cfg.baseURL,
     apiToken: cfg.apiToken,
+    executionContext: buildExecutionContext(),
   });
 }
 
 program
   .name('llm-registry')
   .description('CLI for the LLM Registry')
-  .version('0.1.0');
+  .version('0.1.0')
+  .option('--execution-id <id>', 'Execution ID for agentics tracing (or set LLM_REGISTRY_EXECUTION_ID)')
+  .option('--parent-span-id <id>', 'Parent span ID for agentics tracing (or set LLM_REGISTRY_PARENT_SPAN_ID)');
 
 // Config command
 program

@@ -9,6 +9,7 @@ pub mod checksum;
 pub mod dependency;
 pub mod error;
 pub mod event;
+pub mod execution;
 pub mod provenance;
 pub mod storage;
 pub mod types;
@@ -19,6 +20,10 @@ pub use checksum::{Checksum, HashAlgorithm};
 pub use dependency::{AssetReference, DependencyGraph};
 pub use error::{RegistryError, Result};
 pub use event::{EventType, RegistryEvent};
+pub use execution::{
+    ExecutionContext, ExecutionId, ExecutionResult, ExecutionSpan, SpanArtifact, SpanCollector,
+    SpanId, SpanStatus, SpanType,
+};
 pub use provenance::Provenance;
 pub use storage::{StorageBackend, StorageLocation};
 pub use types::{AssetId, AssetStatus, Tags, Annotations};

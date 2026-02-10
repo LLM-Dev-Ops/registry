@@ -8,6 +8,7 @@ use axum::{
     response::{IntoResponse, Response},
     Json,
 };
+use llm_registry_core::execution::ExecutionResult;
 use serde::{Deserialize, Serialize};
 
 /// Standard success response wrapper
@@ -328,6 +329,90 @@ pub fn deleted() -> (StatusCode, Json<EmptyResponse>) {
     (
         StatusCode::OK,
         Json(EmptyResponse::new("Resource deleted successfully")),
+    )
+}
+
+// ============================================================================
+// Agentics Execution Envelope
+// ============================================================================
+
+/// Response envelope that wraps data alongside the execution span tree.
+///
+/// Every `/v1/*` response includes the full span hierarchy (repo + agent spans)
+/// so that the calling Core can reconstruct the execution graph.
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ExecutionEnvelope<T> {
+    /// Original response data.
+    pub data: T,
+    /// Execution trace (repo span + nested agent spans).
+    pub execution: ExecutionResult,
+    /// Optional response metadata.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub meta: Option<ResponseMeta>,
+}
+
+impl<T> ExecutionEnvelope<T> {
+    pub fn new(data: T, execution: ExecutionResult) -> Self {
+        Self {
+            data,
+            execution,
+            meta: None,
+        }
+    }
+}
+
+impl<T> IntoResponse for ExecutionEnvelope<T>
+where
+    T: Serialize,
+{
+    fn into_response(self) -> Response {
+        Json(self).into_response()
+    }
+}
+
+/// Paginated response with execution spans.
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PaginatedExecutionEnvelope<T> {
+    /// List of items.
+    pub items: Vec<T>,
+    /// Pagination metadata.
+    pub pagination: PaginationMeta,
+    /// Execution trace.
+    pub execution: ExecutionResult,
+}
+
+impl<T> IntoResponse for PaginatedExecutionEnvelope<T>
+where
+    T: Serialize,
+{
+    fn into_response(self) -> Response {
+        Json(self).into_response()
+    }
+}
+
+/// Helper: wrap data + execution into a 200 OK envelope.
+pub fn ok_with_execution<T>(data: T, execution: ExecutionResult) -> Json<ExecutionEnvelope<T>> {
+    Json(ExecutionEnvelope::new(data, execution))
+}
+
+/// Helper: wrap data + execution into a 201 Created envelope.
+pub fn created_with_execution<T: Serialize>(
+    data: T,
+    execution: ExecutionResult,
+) -> (StatusCode, Json<ExecutionEnvelope<T>>) {
+    (StatusCode::CREATED, Json(ExecutionEnvelope::new(data, execution)))
+}
+
+/// Helper: deleted response with execution spans.
+pub fn deleted_with_execution(
+    execution: ExecutionResult,
+) -> (StatusCode, Json<ExecutionEnvelope<EmptyResponse>>) {
+    (
+        StatusCode::OK,
+        Json(ExecutionEnvelope::new(
+            EmptyResponse::new("Resource deleted successfully"),
+            execution,
+        )),
     )
 }
 

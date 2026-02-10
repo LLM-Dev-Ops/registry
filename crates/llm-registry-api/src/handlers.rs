@@ -1,12 +1,16 @@
 //! API request handlers
 //!
 //! This module implements HTTP request handlers for all API endpoints.
+//! Every `/v1/*` handler extracts the [`SpanCollector`] injected by the
+//! execution middleware, creates agent-level spans for each service
+//! invocation, attaches artifacts, and returns an [`ExecutionEnvelope`].
 
 use axum::{
-    extract::{Path, Query, State},
+    extract::{Extension, Path, Query, State},
     http::StatusCode,
     Json,
 };
+use llm_registry_core::execution::{SpanArtifact, SpanCollector, SpanStatus};
 use llm_registry_core::AssetId;
 use llm_registry_service::{
     GetDependencyGraphRequest, RegisterAssetRequest, SearchAssetsRequest, ServiceRegistry,
@@ -19,8 +23,8 @@ use tracing::{debug, info, instrument};
 use crate::{
     error::{ApiError, ApiResult},
     responses::{
-        created, deleted, ok, ApiResponse, ComponentHealth, HealthResponse,
-        PaginatedResponse,
+        created_with_execution, deleted_with_execution, ok_with_execution, ComponentHealth,
+        ExecutionEnvelope, HealthResponse, PaginatedExecutionEnvelope, PaginationMeta,
     },
 };
 
@@ -45,118 +49,292 @@ impl AppState {
 // ============================================================================
 
 /// Register a new asset
-#[instrument(skip(state))]
+#[instrument(skip(state, collector))]
 pub async fn register_asset(
     State(state): State<AppState>,
+    Extension(collector): Extension<SpanCollector>,
     Json(request): Json<RegisterAssetRequest>,
-) -> ApiResult<(StatusCode, Json<ApiResponse<llm_registry_service::RegisterAssetResponse>>)> {
+) -> ApiResult<(StatusCode, Json<ExecutionEnvelope<llm_registry_service::RegisterAssetResponse>>)> {
     info!(
         "Registering asset: {}@{}",
         request.name, request.version
     );
 
-    let response = state
+    let span_id = collector.begin_agent_span("RegistrationService");
+
+    let result = state
         .services
         .registration()
         .register_asset(request)
-        .await
-        .map_err(ApiError::from)?;
+        .await;
 
-    Ok(created(response))
+    match result {
+        Ok(response) => {
+            let _ = collector.attach_artifact(
+                span_id,
+                SpanArtifact {
+                    name: "registered_asset".to_string(),
+                    content_type: Some("application/json".to_string()),
+                    data: serde_json::to_value(&response.asset).unwrap_or_default(),
+                },
+            );
+            collector.end_agent_span(span_id, SpanStatus::Ok);
+            let exec = collector.finalize();
+            Ok(created_with_execution(response, exec))
+        }
+        Err(e) => {
+            let _ = collector.attach_artifact(
+                span_id,
+                SpanArtifact {
+                    name: "error".to_string(),
+                    content_type: Some("text/plain".to_string()),
+                    data: serde_json::Value::String(e.to_string()),
+                },
+            );
+            collector.end_agent_span(span_id, SpanStatus::Failed);
+            let exec = collector.finalize();
+            Err(ApiError::from(e).with_execution(exec))
+        }
+    }
 }
 
 /// Get asset by ID
-#[instrument(skip(state))]
+#[instrument(skip(state, collector))]
 pub async fn get_asset(
     State(state): State<AppState>,
+    Extension(collector): Extension<SpanCollector>,
     Path(id): Path<String>,
-) -> ApiResult<Json<ApiResponse<llm_registry_core::Asset>>> {
+) -> ApiResult<Json<ExecutionEnvelope<llm_registry_core::Asset>>> {
     debug!("Getting asset: {}", id);
 
     let asset_id = id.parse::<AssetId>().map_err(|e| {
-        ApiError::bad_request(format!("Invalid asset ID: {}", e))
+        let err = ApiError::bad_request(format!("Invalid asset ID: {}", e));
+        let exec = collector.finalize_failed("Invalid asset ID");
+        err.with_execution(exec)
     })?;
 
-    let asset = state
+    let span_id = collector.begin_agent_span("SearchService");
+
+    let result = state
         .services
         .search()
         .get_asset(&asset_id)
-        .await
-        .map_err(ApiError::from)?
-        .ok_or_else(|| ApiError::not_found(format!("Asset not found: {}", id)))?;
+        .await;
 
-    Ok(Json(ok(asset)))
+    match result {
+        Ok(Some(asset)) => {
+            let _ = collector.attach_artifact(
+                span_id,
+                SpanArtifact {
+                    name: "asset".to_string(),
+                    content_type: Some("application/json".to_string()),
+                    data: serde_json::to_value(&asset).unwrap_or_default(),
+                },
+            );
+            collector.end_agent_span(span_id, SpanStatus::Ok);
+            let exec = collector.finalize();
+            Ok(ok_with_execution(asset, exec))
+        }
+        Ok(None) => {
+            let _ = collector.attach_artifact(
+                span_id,
+                SpanArtifact {
+                    name: "error".to_string(),
+                    content_type: Some("text/plain".to_string()),
+                    data: serde_json::Value::String(format!("Asset not found: {}", id)),
+                },
+            );
+            collector.end_agent_span(span_id, SpanStatus::Failed);
+            let exec = collector.finalize();
+            Err(ApiError::not_found(format!("Asset not found: {}", id)).with_execution(exec))
+        }
+        Err(e) => {
+            let _ = collector.attach_artifact(
+                span_id,
+                SpanArtifact {
+                    name: "error".to_string(),
+                    content_type: Some("text/plain".to_string()),
+                    data: serde_json::Value::String(e.to_string()),
+                },
+            );
+            collector.end_agent_span(span_id, SpanStatus::Failed);
+            let exec = collector.finalize();
+            Err(ApiError::from(e).with_execution(exec))
+        }
+    }
 }
 
 /// List/search assets with pagination
-#[instrument(skip(state))]
+#[instrument(skip(state, collector))]
 pub async fn list_assets(
     State(state): State<AppState>,
+    Extension(collector): Extension<SpanCollector>,
     Query(params): Query<SearchAssetsRequest>,
-) -> ApiResult<Json<PaginatedResponse<llm_registry_core::Asset>>> {
+) -> ApiResult<Json<PaginatedExecutionEnvelope<llm_registry_core::Asset>>> {
     debug!("Searching assets with filters: {:?}", params);
 
-    let response = state
+    let span_id = collector.begin_agent_span("SearchService");
+
+    let result = state
         .services
         .search()
         .search_assets(params)
-        .await
-        .map_err(ApiError::from)?;
+        .await;
 
-    Ok(Json(PaginatedResponse::new(
-        response.assets,
-        response.total,
-        response.offset,
-        response.limit,
-    )))
+    match result {
+        Ok(response) => {
+            let _ = collector.attach_artifact(
+                span_id,
+                SpanArtifact {
+                    name: "search_results".to_string(),
+                    content_type: Some("application/json".to_string()),
+                    data: serde_json::json!({
+                        "total": response.total,
+                        "count": response.assets.len(),
+                    }),
+                },
+            );
+            collector.end_agent_span(span_id, SpanStatus::Ok);
+            let exec = collector.finalize();
+
+            let has_more = response.offset + response.assets.len() as i64
+                > response.total.min(response.offset + response.limit);
+
+            Ok(Json(PaginatedExecutionEnvelope {
+                items: response.assets,
+                pagination: PaginationMeta {
+                    total: response.total,
+                    offset: response.offset,
+                    limit: response.limit,
+                    has_more,
+                },
+                execution: exec,
+            }))
+        }
+        Err(e) => {
+            let _ = collector.attach_artifact(
+                span_id,
+                SpanArtifact {
+                    name: "error".to_string(),
+                    content_type: Some("text/plain".to_string()),
+                    data: serde_json::Value::String(e.to_string()),
+                },
+            );
+            collector.end_agent_span(span_id, SpanStatus::Failed);
+            let exec = collector.finalize();
+            Err(ApiError::from(e).with_execution(exec))
+        }
+    }
 }
 
 /// Update asset metadata
-#[instrument(skip(state))]
+#[instrument(skip(state, collector))]
 pub async fn update_asset(
     State(state): State<AppState>,
+    Extension(collector): Extension<SpanCollector>,
     Path(id): Path<String>,
     Json(mut request): Json<UpdateAssetRequest>,
-) -> ApiResult<Json<ApiResponse<llm_registry_service::UpdateAssetResponse>>> {
+) -> ApiResult<Json<ExecutionEnvelope<llm_registry_service::UpdateAssetResponse>>> {
     info!("Updating asset: {}", id);
 
     let asset_id = id.parse::<AssetId>().map_err(|e| {
-        ApiError::bad_request(format!("Invalid asset ID: {}", e))
+        let err = ApiError::bad_request(format!("Invalid asset ID: {}", e));
+        let exec = collector.finalize_failed("Invalid asset ID");
+        err.with_execution(exec)
     })?;
 
     // Set asset ID from path
     request.asset_id = asset_id;
 
-    let response = state
+    let span_id = collector.begin_agent_span("RegistrationService");
+
+    let result = state
         .services
         .registration()
         .update_asset(request)
-        .await
-        .map_err(ApiError::from)?;
+        .await;
 
-    Ok(Json(ok(response)))
+    match result {
+        Ok(response) => {
+            let _ = collector.attach_artifact(
+                span_id,
+                SpanArtifact {
+                    name: "updated_asset".to_string(),
+                    content_type: Some("application/json".to_string()),
+                    data: serde_json::to_value(&response.asset).unwrap_or_default(),
+                },
+            );
+            collector.end_agent_span(span_id, SpanStatus::Ok);
+            let exec = collector.finalize();
+            Ok(ok_with_execution(response, exec))
+        }
+        Err(e) => {
+            let _ = collector.attach_artifact(
+                span_id,
+                SpanArtifact {
+                    name: "error".to_string(),
+                    content_type: Some("text/plain".to_string()),
+                    data: serde_json::Value::String(e.to_string()),
+                },
+            );
+            collector.end_agent_span(span_id, SpanStatus::Failed);
+            let exec = collector.finalize();
+            Err(ApiError::from(e).with_execution(exec))
+        }
+    }
 }
 
 /// Delete asset
-#[instrument(skip(state))]
+#[instrument(skip(state, collector))]
 pub async fn delete_asset(
     State(state): State<AppState>,
+    Extension(collector): Extension<SpanCollector>,
     Path(id): Path<String>,
-) -> ApiResult<(StatusCode, Json<crate::responses::EmptyResponse>)> {
+) -> ApiResult<(StatusCode, Json<ExecutionEnvelope<crate::responses::EmptyResponse>>)> {
     info!("Deleting asset: {}", id);
 
     let asset_id = id.parse::<AssetId>().map_err(|e| {
-        ApiError::bad_request(format!("Invalid asset ID: {}", e))
+        let err = ApiError::bad_request(format!("Invalid asset ID: {}", e));
+        let exec = collector.finalize_failed("Invalid asset ID");
+        err.with_execution(exec)
     })?;
 
-    state
+    let span_id = collector.begin_agent_span("RegistrationService");
+
+    let result = state
         .services
         .registration()
         .delete_asset(&asset_id)
-        .await
-        .map_err(ApiError::from)?;
+        .await;
 
-    Ok(deleted())
+    match result {
+        Ok(()) => {
+            let _ = collector.attach_artifact(
+                span_id,
+                SpanArtifact {
+                    name: "deleted_asset_id".to_string(),
+                    content_type: Some("text/plain".to_string()),
+                    data: serde_json::Value::String(id),
+                },
+            );
+            collector.end_agent_span(span_id, SpanStatus::Ok);
+            let exec = collector.finalize();
+            Ok(deleted_with_execution(exec))
+        }
+        Err(e) => {
+            let _ = collector.attach_artifact(
+                span_id,
+                SpanArtifact {
+                    name: "error".to_string(),
+                    content_type: Some("text/plain".to_string()),
+                    data: serde_json::Value::String(e.to_string()),
+                },
+            );
+            collector.end_agent_span(span_id, SpanStatus::Failed);
+            let exec = collector.finalize();
+            Err(ApiError::from(e).with_execution(exec))
+        }
+    }
 }
 
 // ============================================================================
@@ -164,16 +342,19 @@ pub async fn delete_asset(
 // ============================================================================
 
 /// Get dependency graph for an asset
-#[instrument(skip(state))]
+#[instrument(skip(state, collector))]
 pub async fn get_dependencies(
     State(state): State<AppState>,
+    Extension(collector): Extension<SpanCollector>,
     Path(id): Path<String>,
     Query(params): Query<DependencyGraphParams>,
-) -> ApiResult<Json<ApiResponse<llm_registry_service::DependencyGraphResponse>>> {
+) -> ApiResult<Json<ExecutionEnvelope<llm_registry_service::DependencyGraphResponse>>> {
     debug!("Getting dependency graph for asset: {}", id);
 
     let asset_id = id.parse::<AssetId>().map_err(|e| {
-        ApiError::bad_request(format!("Invalid asset ID: {}", e))
+        let err = ApiError::bad_request(format!("Invalid asset ID: {}", e));
+        let exec = collector.finalize_failed("Invalid asset ID");
+        err.with_execution(exec)
     })?;
 
     let request = GetDependencyGraphRequest {
@@ -181,14 +362,42 @@ pub async fn get_dependencies(
         max_depth: params.max_depth.unwrap_or(-1),
     };
 
-    let response = state
+    let span_id = collector.begin_agent_span("SearchService");
+
+    let result = state
         .services
         .search()
         .get_dependency_graph(request)
-        .await
-        .map_err(ApiError::from)?;
+        .await;
 
-    Ok(Json(ok(response)))
+    match result {
+        Ok(response) => {
+            let _ = collector.attach_artifact(
+                span_id,
+                SpanArtifact {
+                    name: "dependency_graph".to_string(),
+                    content_type: Some("application/json".to_string()),
+                    data: serde_json::to_value(&response).unwrap_or_default(),
+                },
+            );
+            collector.end_agent_span(span_id, SpanStatus::Ok);
+            let exec = collector.finalize();
+            Ok(ok_with_execution(response, exec))
+        }
+        Err(e) => {
+            let _ = collector.attach_artifact(
+                span_id,
+                SpanArtifact {
+                    name: "error".to_string(),
+                    content_type: Some("text/plain".to_string()),
+                    data: serde_json::Value::String(e.to_string()),
+                },
+            );
+            collector.end_agent_span(span_id, SpanStatus::Failed);
+            let exec = collector.finalize();
+            Err(ApiError::from(e).with_execution(exec))
+        }
+    }
 }
 
 /// Query parameters for dependency graph
@@ -199,29 +408,61 @@ pub struct DependencyGraphParams {
 }
 
 /// Get reverse dependencies (dependents)
-#[instrument(skip(state))]
+#[instrument(skip(state, collector))]
 pub async fn get_dependents(
     State(state): State<AppState>,
+    Extension(collector): Extension<SpanCollector>,
     Path(id): Path<String>,
-) -> ApiResult<Json<ApiResponse<Vec<llm_registry_core::Asset>>>> {
+) -> ApiResult<Json<ExecutionEnvelope<Vec<llm_registry_core::Asset>>>> {
     debug!("Getting dependents for asset: {}", id);
 
     let asset_id = id.parse::<AssetId>().map_err(|e| {
-        ApiError::bad_request(format!("Invalid asset ID: {}", e))
+        let err = ApiError::bad_request(format!("Invalid asset ID: {}", e));
+        let exec = collector.finalize_failed("Invalid asset ID");
+        err.with_execution(exec)
     })?;
 
-    let dependents = state
+    let span_id = collector.begin_agent_span("SearchService");
+
+    let result = state
         .services
         .search()
         .get_reverse_dependencies(&asset_id)
-        .await
-        .map_err(ApiError::from)?;
+        .await;
 
-    Ok(Json(ok(dependents)))
+    match result {
+        Ok(dependents) => {
+            let _ = collector.attach_artifact(
+                span_id,
+                SpanArtifact {
+                    name: "dependents".to_string(),
+                    content_type: Some("application/json".to_string()),
+                    data: serde_json::json!({ "count": dependents.len() }),
+                },
+            );
+            collector.end_agent_span(span_id, SpanStatus::Ok);
+            let exec = collector.finalize();
+            Ok(ok_with_execution(dependents, exec))
+        }
+        Err(e) => {
+            let _ = collector.attach_artifact(
+                span_id,
+                SpanArtifact {
+                    name: "error".to_string(),
+                    content_type: Some("text/plain".to_string()),
+                    data: serde_json::Value::String(e.to_string()),
+                },
+            );
+            collector.end_agent_span(span_id, SpanStatus::Failed);
+            let exec = collector.finalize();
+            Err(ApiError::from(e).with_execution(exec))
+        }
+    }
 }
 
 // ============================================================================
-// Health & Metrics Handlers
+// Health & Metrics Handlers (NOT instrumented with execution spans —
+// these are infrastructure endpoints outside the /v1 execution boundary)
 // ============================================================================
 
 /// Health check endpoint
@@ -275,7 +516,7 @@ pub async fn metrics() -> ApiResult<String> {
 
 /// Get API version information
 #[instrument]
-pub async fn version_info() -> ApiResult<Json<ApiResponse<VersionInfo>>> {
+pub async fn version_info() -> ApiResult<Json<crate::responses::ApiResponse<VersionInfo>>> {
     let info = VersionInfo {
         version: env!("CARGO_PKG_VERSION").to_string(),
         api_version: "v1".to_string(),
@@ -284,7 +525,7 @@ pub async fn version_info() -> ApiResult<Json<ApiResponse<VersionInfo>>> {
             .to_string(),
     };
 
-    Ok(Json(ok(info)))
+    Ok(Json(crate::responses::ok(info)))
 }
 
 /// Version information

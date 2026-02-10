@@ -1,5 +1,78 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
+// ============================================================================
+// Agentics Execution System Types
+// ============================================================================
+
+/**
+ * Execution context for agentics system tracing.
+ * Must be provided for all /v1/* API calls.
+ */
+export interface ExecutionContext {
+  /** Unique identifier for the execution (assigned by the Core) */
+  executionId: string;
+  /** Parent span ID from the calling entity in the agentics DAG */
+  parentSpanId: string;
+}
+
+/** An artifact attached to an agent-level span */
+export interface SpanArtifact {
+  name: string;
+  content_type?: string;
+  data: any;
+}
+
+/** A single execution span (repo or agent level) */
+export interface ExecutionSpan {
+  span_id: string;
+  parent_span_id: string;
+  span_type: 'repo' | 'agent';
+  name: string;
+  started_at: string;
+  ended_at?: string;
+  status: 'ok' | 'failed';
+  artifacts: SpanArtifact[];
+  attributes: Record<string, any>;
+}
+
+/** The execution result returned with every /v1/* response */
+export interface ExecutionResult {
+  execution_id: string;
+  spans: ExecutionSpan[];
+}
+
+/** Response envelope wrapping data alongside execution spans */
+export interface ExecutionEnvelope<T> {
+  data: T;
+  execution: ExecutionResult;
+  meta?: Record<string, any>;
+}
+
+/** Paginated response with execution spans */
+export interface PaginatedExecutionEnvelope<T> {
+  items: T[];
+  pagination: {
+    total: number;
+    offset: number;
+    limit: number;
+    has_more: boolean;
+  };
+  execution: ExecutionResult;
+}
+
+/** Error response that may include execution spans */
+export interface ErrorResponse {
+  status: number;
+  error: string;
+  code?: string;
+  timestamp: string;
+  execution?: ExecutionResult;
+}
+
+// ============================================================================
+// Configuration & Domain Types
+// ============================================================================
+
 /**
  * Configuration options for the LLM Registry client
  */
@@ -10,6 +83,8 @@ export interface LLMRegistryConfig {
   apiToken?: string;
   /** Request timeout in milliseconds (default: 30000) */
   timeout?: number;
+  /** Default execution context applied to all /v1/* requests */
+  executionContext?: ExecutionContext;
   /** Additional axios configuration */
   axiosConfig?: AxiosRequestConfig;
 }
@@ -80,37 +155,40 @@ export interface SearchFilters {
   offset?: number;
 }
 
+// ============================================================================
+// SDK Client
+// ============================================================================
+
 /**
  * LLM Registry SDK Client
  *
- * A TypeScript client for interacting with the LLM Registry API
+ * A TypeScript client for interacting with the LLM Registry API.
+ * Supports the Agentics execution system by injecting execution context
+ * headers (X-Execution-Id, X-Parent-Span-Id) into all /v1/* requests.
  *
  * @example
  * ```typescript
  * const client = new LLMRegistryClient({
  *   baseURL: 'http://localhost:8080',
- *   apiToken: 'your-api-token'
+ *   apiToken: 'your-api-token',
+ *   executionContext: {
+ *     executionId: 'exec-001',
+ *     parentSpanId: '01HQWX...',
+ *   },
  * });
  *
- * // List models
+ * // List models (returns ExecutionEnvelope with spans)
  * const models = await client.listModels();
- *
- * // Get a specific model
- * const model = await client.getModel('model-id');
- *
- * // Create a new model
- * const newModel = await client.createModel({
- *   name: 'my-model',
- *   version: '1.0.0',
- *   description: 'My custom model'
- * });
  * ```
  */
 export class LLMRegistryClient {
   private client: AxiosInstance;
+  private executionContext?: ExecutionContext;
 
   constructor(config: LLMRegistryConfig) {
     const { baseURL, apiToken, timeout = 30000, axiosConfig = {} } = config;
+
+    this.executionContext = config.executionContext;
 
     this.client = axios.create({
       baseURL,
@@ -122,6 +200,24 @@ export class LLMRegistryClient {
       },
       ...axiosConfig,
     });
+
+    // Inject execution context headers into every request
+    this.client.interceptors.request.use((reqConfig) => {
+      const ctx = this.executionContext;
+      if (ctx) {
+        reqConfig.headers = reqConfig.headers || {};
+        reqConfig.headers['X-Execution-Id'] = ctx.executionId;
+        reqConfig.headers['X-Parent-Span-Id'] = ctx.parentSpanId;
+      }
+      return reqConfig;
+    });
+  }
+
+  /**
+   * Update the execution context for subsequent requests.
+   */
+  setExecutionContext(ctx: ExecutionContext): void {
+    this.executionContext = ctx;
   }
 
   // Models API

@@ -8,6 +8,7 @@ use axum::{
     response::{IntoResponse, Response},
     Json,
 };
+use llm_registry_core::execution::ExecutionResult;
 use llm_registry_service::ServiceError;
 use serde::{Deserialize, Serialize};
 use std::fmt;
@@ -18,6 +19,8 @@ pub struct ApiError {
     status_code: StatusCode,
     message: String,
     error_code: Option<String>,
+    /// Execution spans to include in the error response (for agentics tracing).
+    execution: Option<ExecutionResult>,
 }
 
 impl ApiError {
@@ -27,6 +30,7 @@ impl ApiError {
             status_code,
             message: message.into(),
             error_code: None,
+            execution: None,
         }
     }
 
@@ -40,7 +44,15 @@ impl ApiError {
             status_code,
             message: message.into(),
             error_code: Some(error_code.into()),
+            execution: None,
         }
+    }
+
+    /// Attach execution spans to this error so they are included in the
+    /// response body (requirement: failed requests must still return spans).
+    pub fn with_execution(mut self, execution: ExecutionResult) -> Self {
+        self.execution = Some(execution);
+        self
     }
 
     /// Create a bad request error (400)
@@ -102,6 +114,10 @@ pub struct ErrorResponse {
 
     /// Timestamp of the error
     pub timestamp: chrono::DateTime<chrono::Utc>,
+
+    /// Execution spans (present when the request had a valid execution context).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution: Option<ExecutionResult>,
 }
 
 impl IntoResponse for ApiError {
@@ -111,6 +127,7 @@ impl IntoResponse for ApiError {
             error: self.message,
             code: self.error_code,
             timestamp: chrono::Utc::now(),
+            execution: self.execution,
         };
 
         (self.status_code, Json(error_response)).into_response()
@@ -223,6 +240,7 @@ mod tests {
             error: "Not found".to_string(),
             code: Some("NOT_FOUND".to_string()),
             timestamp: chrono::Utc::now(),
+            execution: None,
         };
 
         let json = serde_json::to_string(&response).unwrap();

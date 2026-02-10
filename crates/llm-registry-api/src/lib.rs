@@ -40,6 +40,7 @@
 pub mod auth;
 pub mod auth_handlers;
 pub mod error;
+pub mod execution_middleware;
 pub mod graphql;
 pub mod grpc;
 pub mod handlers;
@@ -64,10 +65,12 @@ pub use handlers::{AppState, VersionInfo};
 pub use jwt::{Claims, JwtConfig, JwtManager, TokenPair};
 pub use middleware::{CorsConfig, MiddlewareConfig, UuidRequestIdGenerator};
 pub use rate_limit::{rate_limit, RateLimitConfig, RateLimiterState};
+pub use execution_middleware::require_execution_context;
 pub use rbac::{Permission, RbacPolicy, Role};
 pub use responses::{
-    created, deleted, no_content, ok, ApiResponse, ComponentHealth, EmptyResponse, HealthResponse,
-    HealthStatus, PaginatedResponse, ResponseMeta,
+    created, created_with_execution, deleted, deleted_with_execution, no_content, ok,
+    ok_with_execution, ApiResponse, ComponentHealth, EmptyResponse, ExecutionEnvelope,
+    HealthResponse, HealthStatus, PaginatedExecutionEnvelope, PaginatedResponse, ResponseMeta,
 };
 pub use routes::{build_router, build_router_with_auth, build_router_with_graphql, RouteConfig};
 
