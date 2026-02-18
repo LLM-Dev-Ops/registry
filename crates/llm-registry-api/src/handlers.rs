@@ -541,6 +541,60 @@ pub struct VersionInfo {
     pub build_timestamp: String,
 }
 
+// ============================================================================
+// Execution Ingestion Handler (data-core fanout)
+// ============================================================================
+
+/// Payload from data-core execution fanout
+#[derive(Debug, Deserialize)]
+pub struct ExecutionRecordRequest {
+    /// Source system
+    pub source: String,
+
+    /// Event type
+    pub event_type: String,
+
+    /// Execution identifier
+    pub execution_id: String,
+
+    /// ISO-8601 timestamp
+    pub timestamp: String,
+
+    /// Lineage/execution data
+    pub payload: serde_json::Value,
+}
+
+/// Response for accepted execution records
+#[derive(Debug, Serialize)]
+pub struct ExecutionAcceptedResponse {
+    pub status: String,
+    pub execution_id: String,
+}
+
+/// Accept an execution record from data-core fanout.
+///
+/// This endpoint lives outside the execution-context middleware because it
+/// *receives* execution records rather than participating in the span system.
+#[instrument(skip(request), fields(execution_id = %request.execution_id, source = %request.source))]
+pub async fn receive_execution(
+    Json(request): Json<ExecutionRecordRequest>,
+) -> (StatusCode, Json<ExecutionAcceptedResponse>) {
+    info!(
+        execution_id = %request.execution_id,
+        source = %request.source,
+        event_type = %request.event_type,
+        "Accepted execution record from data-core"
+    );
+
+    (
+        StatusCode::ACCEPTED,
+        Json(ExecutionAcceptedResponse {
+            status: "accepted".to_string(),
+            execution_id: request.execution_id,
+        }),
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

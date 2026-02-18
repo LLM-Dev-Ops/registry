@@ -313,6 +313,7 @@ impl IntoResponse for AuthError {
             error: message.to_string(),
             code: None,
             timestamp: chrono::Utc::now(),
+            execution: None,
         };
 
         (status, axum::Json(error_response)).into_response()

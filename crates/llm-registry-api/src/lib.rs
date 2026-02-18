@@ -61,7 +61,7 @@ pub use graphql::{
     Query as GraphQLQuery,
 };
 pub use grpc::{build_grpc_server, serve_grpc, RegistryServiceImpl, RegistryServiceServer};
-pub use handlers::{AppState, VersionInfo};
+pub use handlers::{AppState, ExecutionAcceptedResponse, ExecutionRecordRequest, VersionInfo};
 pub use jwt::{Claims, JwtConfig, JwtManager, TokenPair};
 pub use middleware::{CorsConfig, MiddlewareConfig, UuidRequestIdGenerator};
 pub use rate_limit::{rate_limit, RateLimitConfig, RateLimiterState};

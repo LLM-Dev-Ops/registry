@@ -332,6 +332,7 @@ impl IntoResponse for RateLimitError {
                     error: "Rate limit exceeded".to_string(),
                     code: Some("RATE_LIMIT_EXCEEDED".to_string()),
                     timestamp: chrono::Utc::now(),
+                    execution: None,
                 };
 
                 let mut response = (StatusCode::TOO_MANY_REQUESTS, axum::Json(error_response))

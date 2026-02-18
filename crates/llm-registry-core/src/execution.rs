@@ -204,9 +204,10 @@ impl SpanCollector {
     pub fn begin_agent_span(&self, agent_name: &str) -> SpanId {
         let mut inner = self.inner.lock().unwrap();
         let span_id = SpanId::new();
+        let parent_id = inner.repo_span_id;
         inner.spans.push(ExecutionSpan {
             span_id,
-            parent_span_id: inner.repo_span_id,
+            parent_span_id: parent_id,
             span_type: SpanType::Agent,
             name: agent_name.to_string(),
             started_at: Utc::now(),

@@ -15,7 +15,7 @@ use crate::{
     graphql::{build_schema, graphql_handler, graphql_playground},
     handlers::{
         delete_asset, get_asset, get_dependencies, get_dependents, health_check, list_assets,
-        metrics, register_asset, update_asset, version_info, AppState,
+        metrics, receive_execution, register_asset, update_asset, version_info, AppState,
     },
 };
 
@@ -28,6 +28,8 @@ pub fn build_router(state: AppState) -> Router {
         .route("/version", get(version_info))
         // API v1 routes
         .nest("/v1", build_v1_routes())
+        // Data-core execution ingestion (no execution-context middleware)
+        .route("/api/v1/executions", post(receive_execution))
         .with_state(state)
 }
 
@@ -65,7 +67,12 @@ pub fn build_router_with_auth(
         .with_state(auth_handler_state);
 
     // Build v1 routes (with optional authentication on some endpoints)
-    let v1_routes = build_v1_routes().with_state(state);
+    let v1_routes = build_v1_routes().with_state(state.clone());
+
+    // Data-core execution ingestion (no execution-context middleware)
+    let execution_routes = Router::new()
+        .route("/api/v1/executions", post(receive_execution))
+        .with_state(state);
 
     // Combine all routes
     Router::new()
@@ -73,6 +80,7 @@ pub fn build_router_with_auth(
         .nest("/v1/auth", auth_routes)
         .nest("/v1/auth", protected_auth_routes)
         .nest("/v1", v1_routes)
+        .merge(execution_routes)
 }
 
 /// Build the API router with GraphQL support
@@ -122,7 +130,12 @@ pub fn build_router_with_graphql(
         .with_state(auth_handler_state);
 
     // Build v1 routes
-    let v1_routes = build_v1_routes().with_state(state);
+    let v1_routes = build_v1_routes().with_state(state.clone());
+
+    // Data-core execution ingestion (no execution-context middleware)
+    let execution_routes = Router::new()
+        .route("/api/v1/executions", post(receive_execution))
+        .with_state(state);
 
     // Combine all routes
     Router::new()
@@ -131,6 +144,7 @@ pub fn build_router_with_graphql(
         .nest("/v1/auth", auth_routes)
         .nest("/v1/auth", protected_auth_routes)
         .nest("/v1", v1_routes)
+        .merge(execution_routes)
 }
 
 /// Build v1 API routes

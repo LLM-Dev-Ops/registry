@@ -18,7 +18,7 @@ use std::net::SocketAddr;
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::signal;
-use tracing::info;
+use tracing::{error, info, warn};
 
 use config::ServerConfig;
 
@@ -91,9 +91,10 @@ async fn main() -> Result<()> {
     info!("Server: {}", config.bind_address());
     info!("Database: {}", mask_database_url(&config.database.url));
 
-    // Setup database connection pool
-    // (migrations are run automatically by PoolConfig if enabled)
-    let pool = setup_database(&config).await?;
+    // Setup database connection pool with retries.
+    // The server must bind the HTTP port promptly so Cloud Run startup probes
+    // pass, so we retry DB connections rather than crashing on first failure.
+    let pool = setup_database_with_retries(&config).await?;
 
     // Create repositories
     let asset_repository = Arc::new(PostgresAssetRepository::new(pool.clone()));
@@ -172,10 +173,38 @@ async fn main() -> Result<()> {
     Ok(())
 }
 
+/// Setup database connection pool with exponential backoff retries.
+///
+/// Cloud Run cold starts may race with Cloud SQL proxy readiness, so we
+/// retry a few times before giving up.
+async fn setup_database_with_retries(config: &ServerConfig) -> Result<PgPool> {
+    const MAX_RETRIES: u32 = 5;
+    let mut delay = Duration::from_secs(2);
+
+    for attempt in 1..=MAX_RETRIES {
+        info!("Connecting to database (attempt {}/{})", attempt, MAX_RETRIES);
+
+        match setup_database(config).await {
+            Ok(pool) => return Ok(pool),
+            Err(e) => {
+                if attempt == MAX_RETRIES {
+                    error!("Database connection failed after {} attempts: {:#}", MAX_RETRIES, e);
+                    return Err(e);
+                }
+                warn!(
+                    "Database connection attempt {} failed: {}. Retrying in {:?}...",
+                    attempt, e, delay
+                );
+                tokio::time::sleep(delay).await;
+                delay *= 2;
+            }
+        }
+    }
+    unreachable!()
+}
+
 /// Setup database connection pool
 async fn setup_database(config: &ServerConfig) -> Result<PgPool> {
-    info!("Connecting to database");
-
     let pool_config = PoolConfig::new(&config.database.url)
         .min_connections(config.database.min_connections)
         .max_connections(config.database.max_connections)
