@@ -1,0 +1,19 @@
+# Git
+.git
+.gitignore
+
+# Source (only dist/ is needed at runtime)
+src/
+tsconfig.json
+
+# Dev tooling
+.eslintrc*
+.prettierrc*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

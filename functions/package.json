@@ -1,0 +1,23 @@
+{
+  "name": "registry-agents",
+  "version": "1.0.0",
+  "description": "Cloud Function entry point for Registry Agents (index, reputation, bootstrap)",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "gcp-build": "",
+    "start": "npx functions-framework --target=handler --source=dist",
+    "test": "node dist/index.test.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3"
+  }
+}
