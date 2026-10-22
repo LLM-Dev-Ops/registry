@@ -1,13 +1,6 @@
-// ============================================================================
-// Contract schemas for the 3 Registry Agents
-// ============================================================================
-
 export interface IndexRequest {
-  /** Asset IDs to index, or empty to trigger full re-index */
   asset_ids?: string[];
-  /** Index operation mode */
   mode: 'full' | 'incremental' | 'rebuild';
-  /** Optional filter by asset type */
   asset_type?: 'MODEL' | 'PIPELINE' | 'TEST_SUITE' | 'POLICY' | 'DATASET';
 }
 
@@ -19,11 +12,8 @@ export interface IndexResponse {
 }
 
 export interface ReputationRequest {
-  /** Agent identifier to query or update reputation for */
   agent_id: string;
-  /** Operation: 'query' to read, 'record' to submit a new signal */
   operation: 'query' | 'record';
-  /** Signal to record (required when operation is 'record') */
   signal?: {
     score: number;
     category: 'reliability' | 'accuracy' | 'latency' | 'compliance';
@@ -40,11 +30,8 @@ export interface ReputationResponse {
 }
 
 export interface BootstrapRequest {
-  /** Template identifier to bootstrap from */
   template_id: string;
-  /** Name for the new agent instance */
   agent_name: string;
-  /** Configuration overrides for the bootstrapped agent */
   config_overrides?: Record<string, unknown>;
 }
 
@@ -60,7 +47,6 @@ export interface BootstrapResponse {
   };
 }
 
-// JSON Schema definitions for runtime validation
 export const CONTRACT_SCHEMAS = {
   index: {
     request: {
@@ -108,6 +94,7 @@ export const CONTRACT_SCHEMAS = {
             evidence: { type: 'string' },
           },
           required: ['score', 'category'],
+          additionalProperties: false,
         },
       },
       additionalProperties: false,
