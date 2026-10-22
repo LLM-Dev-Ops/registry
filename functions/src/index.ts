@@ -5,10 +5,6 @@ import { handleReputation } from './agents/reputation-agent';
 import { handleBootstrap } from './agents/bootstrap-agent';
 import { CONTRACT_SCHEMAS } from './contracts';
 
-// ============================================================================
-// Types
-// ============================================================================
-
 interface Request extends IncomingMessage {
   body?: unknown;
   path?: string;
@@ -41,12 +37,20 @@ interface AgentResult {
   duration_ms: number;
 }
 
-// ============================================================================
-// Constants
-// ============================================================================
+interface JsonSchema {
+  type?: 'object' | 'array' | 'string' | 'number' | 'integer' | 'boolean';
+  required?: readonly string[];
+  properties?: Readonly<Record<string, JsonSchema>>;
+  items?: JsonSchema;
+  enum?: readonly unknown[];
+  minimum?: number;
+  maximum?: number;
+  additionalProperties?: boolean;
+}
 
 const SERVICE_NAME = 'registry-agents';
 const HEALTH_AGENTS = ['index', 'reputation', 'bootstrap'] as const;
+const CORRELATION_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$/;
 
 const CORS_HEADERS: Record<string, string> = {
   'Access-Control-Allow-Origin': '*',
@@ -55,13 +59,12 @@ const CORS_HEADERS: Record<string, string> = {
   'Access-Control-Max-Age': '3600',
 };
 
-// ============================================================================
-// Helpers
-// ============================================================================
-
 function buildExecutionMetadata(req: Request): ExecutionMetadata {
-  const correlationId = req.headers['x-correlation-id'];
-  const traceId = (Array.isArray(correlationId) ? correlationId[0] : correlationId) || crypto.randomUUID();
+  const header = req.headers['x-correlation-id'];
+  const candidate = Array.isArray(header) ? header[0] : header;
+  const traceId = candidate && CORRELATION_ID_PATTERN.test(candidate)
+    ? candidate
+    : crypto.randomUUID();
 
   return {
     trace_id: traceId,
@@ -83,38 +86,95 @@ function sendJson(res: Response, statusCode: number, body: unknown): void {
 }
 
 function getRequestPath(req: Request): string {
-  // Cloud Functions may provide req.path, fall back to parsing req.url
   return req.path || new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`).pathname;
 }
 
-function validateRequestBody(body: unknown, schemaName: keyof typeof CONTRACT_SCHEMAS): string | null {
-  if (!body || typeof body !== 'object') {
-    return 'Request body must be a JSON object';
+function schemaTypeMatches(value: unknown, type: JsonSchema['type']): boolean {
+  switch (type) {
+    case 'object':
+      return value !== null && typeof value === 'object' && !Array.isArray(value);
+    case 'array':
+      return Array.isArray(value);
+    case 'number':
+      return typeof value === 'number' && Number.isFinite(value);
+    case 'integer':
+      return typeof value === 'number' && Number.isInteger(value);
+    case 'string':
+    case 'boolean':
+      return typeof value === type;
+    default:
+      return true;
+  }
+}
+
+function validateSchema(value: unknown, schema: JsonSchema, path: string): string | null {
+  if (!schemaTypeMatches(value, schema.type)) {
+    return `${path} must be of type ${schema.type}`;
   }
 
-  const schema = CONTRACT_SCHEMAS[schemaName].request;
-  const required = schema.required as readonly string[];
-  const obj = body as Record<string, unknown>;
+  if (schema.enum && !schema.enum.some((candidate) => Object.is(candidate, value))) {
+    return `${path} must be one of: ${schema.enum.join(', ')}`;
+  }
 
-  for (const field of required) {
-    if (!(field in obj)) {
-      return `Missing required field: ${field}`;
+  if (typeof value === 'number') {
+    if (schema.minimum !== undefined && value < schema.minimum) {
+      return `${path} must be at least ${schema.minimum}`;
+    }
+    if (schema.maximum !== undefined && value > schema.maximum) {
+      return `${path} must be at most ${schema.maximum}`;
     }
   }
 
-  const allowedProps = Object.keys(schema.properties);
-  for (const key of Object.keys(obj)) {
-    if (!allowedProps.includes(key)) {
-      return `Unknown field: ${key}`;
+  if (Array.isArray(value) && schema.items) {
+    for (let index = 0; index < value.length; index++) {
+      const error = validateSchema(value[index], schema.items, `${path}[${index}]`);
+      if (error) return error;
+    }
+  }
+
+  if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+    const objectValue = value as Record<string, unknown>;
+    const properties = schema.properties || {};
+
+    for (const field of schema.required || []) {
+      if (!Object.prototype.hasOwnProperty.call(objectValue, field)) {
+        return `Missing required field: ${path === 'body' ? field : `${path}.${field}`}`;
+      }
+    }
+
+    if (schema.additionalProperties === false) {
+      for (const key of Object.keys(objectValue)) {
+        if (!Object.prototype.hasOwnProperty.call(properties, key)) {
+          return `Unknown field: ${path === 'body' ? key : `${path}.${key}`}`;
+        }
+      }
+    }
+
+    for (const [key, propertySchema] of Object.entries(properties)) {
+      if (Object.prototype.hasOwnProperty.call(objectValue, key)) {
+        const error = validateSchema(objectValue[key], propertySchema, `${path}.${key}`);
+        if (error) return error;
+      }
     }
   }
 
   return null;
 }
 
-// ============================================================================
-// Route Handlers
-// ============================================================================
+function validateRequestBody(body: unknown, schemaName: keyof typeof CONTRACT_SCHEMAS): string | null {
+  const schema = CONTRACT_SCHEMAS[schemaName].request as JsonSchema;
+  const error = validateSchema(body, schema, 'body');
+  if (error) return error;
+
+  if (schemaName === 'reputation') {
+    const request = body as Record<string, unknown>;
+    if (request.operation === 'record' && !Object.prototype.hasOwnProperty.call(request, 'signal')) {
+      return 'Missing required field: signal';
+    }
+  }
+
+  return null;
+}
 
 async function routeAgent(agentName: string, body: unknown): Promise<AgentResult> {
   const start = performance.now();
@@ -148,9 +208,7 @@ function handleHealth(req: Request, res: Response): void {
     status: 'healthy',
     agents: HEALTH_AGENTS,
     execution_metadata: metadata,
-    layers_executed: [
-      { layer: 'AGENT_ROUTING', status: 'completed' },
-    ],
+    layers_executed: [{ layer: 'AGENT_ROUTING', status: 'completed' }],
   });
 }
 
@@ -160,17 +218,11 @@ function handleContracts(req: Request, res: Response): void {
   sendJson(res, 200, {
     contracts: CONTRACT_SCHEMAS,
     execution_metadata: metadata,
-    layers_executed: [
-      { layer: 'AGENT_ROUTING', status: 'completed' },
-    ],
+    layers_executed: [{ layer: 'AGENT_ROUTING', status: 'completed' }],
   });
 }
 
-async function handleAgentRequest(
-  agentName: string,
-  req: Request,
-  res: Response,
-): Promise<void> {
+async function handleAgentRequest(agentName: string, req: Request, res: Response): Promise<void> {
   const metadata = buildExecutionMetadata(req);
   const layers: LayerEntry[] = [{ layer: 'AGENT_ROUTING', status: 'completed' }];
 
@@ -183,7 +235,6 @@ async function handleAgentRequest(
     return;
   }
 
-  // Validate request body against contract schema
   const validationError = validateRequestBody(
     req.body,
     agentName as keyof typeof CONTRACT_SCHEMAS,
@@ -212,7 +263,11 @@ async function handleAgentRequest(
       layers_executed: layers,
     });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Internal agent error';
+    console.error('Registry agent request failed', {
+      agent: agentName,
+      execution_id: metadata.execution_id,
+      error_name: err instanceof Error ? err.name : 'UnknownError',
+    });
     layers.push({
       layer: `REGISTRY_${agentName.toUpperCase()}`,
       status: 'failed',
@@ -220,16 +275,12 @@ async function handleAgentRequest(
     });
 
     sendJson(res, 500, {
-      error: message,
+      error: 'Internal agent error',
       execution_metadata: metadata,
       layers_executed: layers,
     });
   }
 }
-
-// ============================================================================
-// Entry Point
-// ============================================================================
 
 const AGENT_ROUTES: Record<string, string> = {
   '/v1/registry/index': 'index',
@@ -237,20 +288,9 @@ const AGENT_ROUTES: Record<string, string> = {
   '/v1/registry/bootstrap': 'bootstrap',
 };
 
-/**
- * Cloud Function HTTP handler for registry-agents.
- *
- * Routes:
- *   GET  /health                    - Health check (lists all agents)
- *   GET  /contracts                 - Contract schemas for all agents
- *   POST /v1/registry/index         - Registry Indexing Agent
- *   POST /v1/registry/reputation    - Agent Reputation Agent
- *   POST /v1/registry/bootstrap     - Template Bootstrap Agent
- */
 export const handler = async (req: Request, res: Response): Promise<void> => {
   applyCors(res);
 
-  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
     res.end();
@@ -259,26 +299,22 @@ export const handler = async (req: Request, res: Response): Promise<void> => {
 
   const path = getRequestPath(req);
 
-  // Health endpoint
   if (path === '/health' || path === '/') {
     handleHealth(req, res);
     return;
   }
 
-  // Contracts endpoint
   if (path === '/contracts') {
     handleContracts(req, res);
     return;
   }
 
-  // Agent routes
   const agentName = AGENT_ROUTES[path];
   if (agentName) {
     await handleAgentRequest(agentName, req, res);
     return;
   }
 
-  // 404 for unmatched routes
   const metadata = buildExecutionMetadata(req);
   sendJson(res, 404, {
     error: `Route not found: ${path}`,
