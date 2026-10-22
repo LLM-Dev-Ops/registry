@@ -7,7 +7,7 @@
     "build": "tsc -p tsconfig.json",
     "gcp-build": "",
     "start": "npx functions-framework --target=handler --source=dist",
-    "test": "node dist/index.test.js",
+    "test": "node dist/index.test.js && node dist/validation.test.js",
     "typecheck": "tsc --noEmit"
   },
   "engines": {
