@@ -1,10 +1,6 @@
 "use strict";
-// ============================================================================
-// Contract schemas for the 3 Registry Agents
-// ============================================================================
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CONTRACT_SCHEMAS = void 0;
-// JSON Schema definitions for runtime validation
 exports.CONTRACT_SCHEMAS = {
     index: {
         request: {
@@ -52,6 +48,7 @@ exports.CONTRACT_SCHEMAS = {
                         evidence: { type: 'string' },
                     },
                     required: ['score', 'category'],
+                    additionalProperties: false,
                 },
             },
             additionalProperties: false,
