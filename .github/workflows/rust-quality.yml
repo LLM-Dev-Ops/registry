@@ -1,0 +1,38 @@
+name: Rust Quality
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: registry-rust-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  CARGO_INCREMENTAL: 0
+  CARGO_PROFILE_DEV_DEBUG: 0
+  CARGO_PROFILE_TEST_DEBUG: 0
+jobs:
+  quality:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        command:
+          - cargo test --locked -p llm-registry-core --lib
+          - cargo test --locked --workspace
+          - cargo build --locked --workspace
+          - cargo clippy --locked --workspace --all-targets -- -D warnings
+          - cargo fmt --all -- --check
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f
+        with:
+          toolchain: 1.99.0
+          components: rustfmt, clippy
+      - run: sudo apt-get update && sudo apt-get install --no-install-recommends -y pkg-config libssl-dev protobuf-compiler
+      - run: sha256sum Cargo.lock > "$RUNNER_TEMP/registry-lock.sha256"
+      - run: ${{ matrix.command }}
+      - if: always()
+        run: sha256sum --check "$RUNNER_TEMP/registry-lock.sha256" && git diff --exit-code -- Cargo.lock
