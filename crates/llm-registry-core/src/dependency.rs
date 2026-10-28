@@ -67,7 +67,9 @@ impl AssetReference {
     /// Get the name and version if this is a name/version reference
     pub fn as_name_version(&self) -> Option<(&str, &str)> {
         match self {
-            AssetReference::ByNameVersion { name, version } => Some((name.as_str(), version.as_str())),
+            AssetReference::ByNameVersion { name, version } => {
+                Some((name.as_str(), version.as_str()))
+            }
             _ => None,
         }
     }
@@ -151,7 +153,7 @@ impl DependencyGraph {
 
         self.dependencies
             .entry(asset_id)
-            .or_insert_with(Vec::new)
+            .or_default()
             .push(dependency);
         Ok(())
     }
@@ -187,7 +189,7 @@ impl DependencyGraph {
         let mut rec_stack = HashSet::new();
         let mut path = Vec::new();
 
-        for asset_id in self.dependencies.keys() {
+        for asset_id in &self.sorted_asset_ids() {
             if !visited.contains(asset_id) {
                 self.dfs_cycle_detect(asset_id, &mut visited, &mut rec_stack, &mut path)?;
             }
@@ -208,27 +210,23 @@ impl DependencyGraph {
         rec_stack.insert(*asset_id);
         path.push(*asset_id);
 
-        if let Some(deps) = self.dependencies.get(asset_id) {
-            for dep in deps {
-                // Only follow ID-based dependencies for cycle detection
-                if let Some(dep_id) = dep.as_id() {
-                    if !visited.contains(dep_id) {
-                        self.dfs_cycle_detect(dep_id, visited, rec_stack, path)?;
-                    } else if rec_stack.contains(dep_id) {
-                        // Cycle detected - build the cycle path
-                        let cycle_start = path.iter().position(|id| id == dep_id).unwrap();
-                        let mut cycle_path: Vec<String> = path[cycle_start..]
-                            .iter()
-                            .map(|id| id.to_string())
-                            .collect();
-                        cycle_path.push(dep_id.to_string());
+        for dep_id in &self.sorted_dependency_ids(asset_id) {
+            // Only follow ID-based dependencies for cycle detection
+            if !visited.contains(dep_id) {
+                self.dfs_cycle_detect(dep_id, visited, rec_stack, path)?;
+            } else if rec_stack.contains(dep_id) {
+                // Cycle detected - build the cycle path
+                let cycle_start = path.iter().position(|id| id == dep_id).unwrap();
+                let mut cycle_path: Vec<String> = path[cycle_start..]
+                    .iter()
+                    .map(|id| id.to_string())
+                    .collect();
+                cycle_path.push(dep_id.to_string());
 
-                        return Err(RegistryError::CircularDependency(format!(
-                            "Cycle detected: {}",
-                            cycle_path.join(" -> ")
-                        )));
-                    }
-                }
+                return Err(RegistryError::CircularDependency(format!(
+                    "Cycle detected: {}",
+                    cycle_path.join(" -> ")
+                )));
             }
         }
 
@@ -296,7 +294,7 @@ impl DependencyGraph {
         let mut sorted = Vec::new();
         let mut visited = HashSet::new();
 
-        for asset_id in self.dependencies.keys() {
+        for asset_id in &self.sorted_asset_ids() {
             if !visited.contains(asset_id) {
                 self.topological_visit(asset_id, &mut visited, &mut sorted);
             }
@@ -315,17 +313,34 @@ impl DependencyGraph {
     ) {
         visited.insert(*asset_id);
 
-        if let Some(deps) = self.dependencies.get(asset_id) {
-            for dep in deps {
-                if let Some(dep_id) = dep.as_id() {
-                    if !visited.contains(dep_id) {
-                        self.topological_visit(dep_id, visited, sorted);
-                    }
-                }
+        for dep_id in &self.sorted_dependency_ids(asset_id) {
+            if !visited.contains(dep_id) {
+                self.topological_visit(dep_id, visited, sorted);
             }
         }
 
         sorted.push(*asset_id);
+    }
+
+    /// Canonical traversal makes equivalent graph serializations produce the
+    /// same dependency-first ordering and the same cycle diagnostic.
+    fn sorted_asset_ids(&self) -> Vec<AssetId> {
+        let mut ids: Vec<_> = self.dependencies.keys().copied().collect();
+        ids.sort_unstable_by_key(|id| *id.as_ulid());
+        ids
+    }
+
+    fn sorted_dependency_ids(&self, asset_id: &AssetId) -> Vec<AssetId> {
+        let mut ids: Vec<_> = self
+            .dependencies
+            .get(asset_id)
+            .into_iter()
+            .flatten()
+            .filter_map(|dep| dep.as_id().copied())
+            .collect();
+        ids.sort_unstable_by_key(|id| *id.as_ulid());
+        ids.dedup();
+        ids
     }
 }
 
@@ -344,6 +359,75 @@ impl fmt::Display for DependencyGraph {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn ordered_fixture_ids() -> [AssetId; 3] {
+        [1, 2, 3].map(|n| AssetId::from_string(&format!("{n:026}")).unwrap())
+    }
+
+    #[test]
+    fn test_topological_sort_canonical_dependency_order() {
+        let [root, lower, higher] = ordered_fixture_ids();
+        let mut graph = DependencyGraph::new();
+        graph
+            .add_dependencies(
+                root,
+                vec![AssetReference::by_id(higher), AssetReference::by_id(lower)],
+            )
+            .unwrap();
+        assert_eq!(graph.topological_sort().unwrap(), vec![lower, higher, root]);
+        graph
+            .add_dependencies(
+                root,
+                vec![AssetReference::by_id(lower), AssetReference::by_id(higher)],
+            )
+            .unwrap();
+        assert_eq!(graph.topological_sort().unwrap(), vec![lower, higher, root]);
+    }
+
+    #[test]
+    fn test_cycle_path_canonical_dependency_order() {
+        let [root, lower, higher] = ordered_fixture_ids();
+        let mut graph = DependencyGraph::new();
+        graph
+            .add_dependencies(
+                root,
+                vec![AssetReference::by_id(higher), AssetReference::by_id(lower)],
+            )
+            .unwrap();
+        graph
+            .add_dependency(lower, AssetReference::by_id(root))
+            .unwrap();
+        graph
+            .add_dependency(higher, AssetReference::by_id(root))
+            .unwrap();
+        // Fix the root to isolate edge-order determinism from HashMap seeding.
+        let err = graph
+            .dfs_cycle_detect(
+                &root,
+                &mut HashSet::new(),
+                &mut HashSet::new(),
+                &mut Vec::new(),
+            )
+            .unwrap_err();
+        assert!(err
+            .to_string()
+            .ends_with(&format!("{root} -> {lower} -> {root}")));
+    }
+
+    #[test]
+    fn test_disconnected_roots_are_canonical() {
+        let [lower, middle, higher] = ordered_fixture_ids();
+        for order in [[higher, lower, middle], [middle, higher, lower]] {
+            let mut graph = DependencyGraph::new();
+            for id in order {
+                graph.add_dependencies(id, vec![]).unwrap();
+            }
+            assert_eq!(
+                graph.topological_sort().unwrap(),
+                vec![lower, middle, higher]
+            );
+        }
+    }
 
     #[test]
     fn test_asset_reference_by_id() {
@@ -395,7 +479,9 @@ mod tests {
         let asset1 = AssetId::new();
         let asset2 = AssetId::new();
 
-        graph.add_dependency(asset1, AssetReference::by_id(asset2)).unwrap();
+        graph
+            .add_dependency(asset1, AssetReference::by_id(asset2))
+            .unwrap();
 
         let deps = graph.get_dependencies(&asset1).unwrap();
         assert_eq!(deps.len(), 1);
@@ -407,7 +493,9 @@ mod tests {
         let asset1 = AssetId::new();
         let asset2 = AssetId::new();
 
-        graph.add_dependency(asset1, AssetReference::by_id(asset2)).unwrap();
+        graph
+            .add_dependency(asset1, AssetReference::by_id(asset2))
+            .unwrap();
 
         let deps = graph.get_dependencies(&asset1).unwrap();
         assert_eq!(deps.len(), 1);
@@ -420,7 +508,9 @@ mod tests {
         let asset1 = AssetId::new();
         let asset2 = AssetId::new();
 
-        graph.add_dependency(asset1, AssetReference::by_id(asset2)).unwrap();
+        graph
+            .add_dependency(asset1, AssetReference::by_id(asset2))
+            .unwrap();
         assert!(graph.contains_asset(&asset1));
 
         graph.remove_asset(&asset1);
@@ -434,8 +524,12 @@ mod tests {
         let asset2 = AssetId::new();
 
         // Create a simple cycle: asset1 -> asset2 -> asset1
-        graph.add_dependency(asset1, AssetReference::by_id(asset2)).unwrap();
-        graph.add_dependency(asset2, AssetReference::by_id(asset1)).unwrap();
+        graph
+            .add_dependency(asset1, AssetReference::by_id(asset2))
+            .unwrap();
+        graph
+            .add_dependency(asset2, AssetReference::by_id(asset1))
+            .unwrap();
 
         assert!(graph.detect_circular_dependencies().is_err());
     }
@@ -448,9 +542,15 @@ mod tests {
         let asset3 = AssetId::new();
 
         // Create a cycle: asset1 -> asset2 -> asset3 -> asset1
-        graph.add_dependency(asset1, AssetReference::by_id(asset2)).unwrap();
-        graph.add_dependency(asset2, AssetReference::by_id(asset3)).unwrap();
-        graph.add_dependency(asset3, AssetReference::by_id(asset1)).unwrap();
+        graph
+            .add_dependency(asset1, AssetReference::by_id(asset2))
+            .unwrap();
+        graph
+            .add_dependency(asset2, AssetReference::by_id(asset3))
+            .unwrap();
+        graph
+            .add_dependency(asset3, AssetReference::by_id(asset1))
+            .unwrap();
 
         assert!(graph.detect_circular_dependencies().is_err());
     }
@@ -463,8 +563,12 @@ mod tests {
         let asset3 = AssetId::new();
 
         // Create a DAG: asset1 -> asset2, asset1 -> asset3
-        graph.add_dependency(asset1, AssetReference::by_id(asset2)).unwrap();
-        graph.add_dependency(asset1, AssetReference::by_id(asset3)).unwrap();
+        graph
+            .add_dependency(asset1, AssetReference::by_id(asset2))
+            .unwrap();
+        graph
+            .add_dependency(asset1, AssetReference::by_id(asset3))
+            .unwrap();
 
         assert!(graph.detect_circular_dependencies().is_ok());
     }
@@ -477,8 +581,12 @@ mod tests {
         let asset3 = AssetId::new();
 
         // asset1 -> asset2 -> asset3
-        graph.add_dependency(asset1, AssetReference::by_id(asset2)).unwrap();
-        graph.add_dependency(asset2, AssetReference::by_id(asset3)).unwrap();
+        graph
+            .add_dependency(asset1, AssetReference::by_id(asset2))
+            .unwrap();
+        graph
+            .add_dependency(asset2, AssetReference::by_id(asset3))
+            .unwrap();
 
         let all_deps = graph.get_all_dependencies(&asset1);
         assert_eq!(all_deps.len(), 2);
@@ -494,8 +602,12 @@ mod tests {
         let asset3 = AssetId::new();
 
         // asset1 -> asset3, asset2 -> asset3
-        graph.add_dependency(asset1, AssetReference::by_id(asset3)).unwrap();
-        graph.add_dependency(asset2, AssetReference::by_id(asset3)).unwrap();
+        graph
+            .add_dependency(asset1, AssetReference::by_id(asset3))
+            .unwrap();
+        graph
+            .add_dependency(asset2, AssetReference::by_id(asset3))
+            .unwrap();
 
         let dependents = graph.get_dependents(&asset3);
         assert_eq!(dependents.len(), 2);
@@ -511,8 +623,12 @@ mod tests {
         let asset3 = AssetId::new();
 
         // asset1 -> asset2 -> asset3 (asset1 depends on asset2, asset2 depends on asset3)
-        graph.add_dependency(asset1, AssetReference::by_id(asset2)).unwrap();
-        graph.add_dependency(asset2, AssetReference::by_id(asset3)).unwrap();
+        graph
+            .add_dependency(asset1, AssetReference::by_id(asset2))
+            .unwrap();
+        graph
+            .add_dependency(asset2, AssetReference::by_id(asset3))
+            .unwrap();
         graph.add_dependencies(asset3, vec![]).unwrap(); // asset3 has no dependencies
 
         let sorted = graph.topological_sort().unwrap();
@@ -526,8 +642,18 @@ mod tests {
         let pos3 = sorted.iter().position(|id| id == &asset3).unwrap();
 
         // Verify the order: asset3 < asset2 < asset1
-        assert!(pos3 < pos2, "asset3 (pos {}) should come before asset2 (pos {})", pos3, pos2);
-        assert!(pos2 < pos1, "asset2 (pos {}) should come before asset1 (pos {})", pos2, pos1);
+        assert!(
+            pos3 < pos2,
+            "asset3 (pos {}) should come before asset2 (pos {})",
+            pos3,
+            pos2
+        );
+        assert!(
+            pos2 < pos1,
+            "asset2 (pos {}) should come before asset1 (pos {})",
+            pos2,
+            pos1
+        );
     }
 
     #[test]
@@ -537,8 +663,12 @@ mod tests {
         let asset2 = AssetId::new();
 
         // Create a cycle
-        graph.add_dependency(asset1, AssetReference::by_id(asset2)).unwrap();
-        graph.add_dependency(asset2, AssetReference::by_id(asset1)).unwrap();
+        graph
+            .add_dependency(asset1, AssetReference::by_id(asset2))
+            .unwrap();
+        graph
+            .add_dependency(asset2, AssetReference::by_id(asset1))
+            .unwrap();
 
         assert!(graph.topological_sort().is_err());
     }
