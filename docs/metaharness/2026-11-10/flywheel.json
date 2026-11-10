@@ -1,0 +1,564 @@
+{
+  "parent": "489c613b148b8392d07e8c4f497c038d56a71b14",
+  "candidate": "1573536784aac073faa057fb876ba4996a32fea0",
+  "trials": [
+    {
+      "i": 0,
+      "revision": "489c613b148b8392d07e8c4f497c038d56a71b14",
+      "holdout": [
+        false,
+        true,
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchors": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "statuses": [
+        599,
+        200,
+        599,
+        599,
+        599,
+        599
+      ],
+      "exceptions": 5
+    },
+    {
+      "i": 0,
+      "revision": "1573536784aac073faa057fb876ba4996a32fea0",
+      "holdout": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "anchors": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "exceptions": 0
+    },
+    {
+      "i": 1,
+      "revision": "1573536784aac073faa057fb876ba4996a32fea0",
+      "holdout": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "anchors": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "exceptions": 0
+    },
+    {
+      "i": 1,
+      "revision": "489c613b148b8392d07e8c4f497c038d56a71b14",
+      "holdout": [
+        false,
+        true,
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchors": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "statuses": [
+        599,
+        200,
+        599,
+        599,
+        599,
+        599
+      ],
+      "exceptions": 5
+    },
+    {
+      "i": 2,
+      "revision": "489c613b148b8392d07e8c4f497c038d56a71b14",
+      "holdout": [
+        false,
+        true,
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchors": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "statuses": [
+        599,
+        200,
+        599,
+        599,
+        599,
+        599
+      ],
+      "exceptions": 5
+    },
+    {
+      "i": 2,
+      "revision": "1573536784aac073faa057fb876ba4996a32fea0",
+      "holdout": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "anchors": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "exceptions": 0
+    }
+  ],
+  "tests": {
+    "489c613b148b8392d07e8c4f497c038d56a71b14": {
+      "exit": 0,
+      "stdout": "\n> registry-agents@1.0.0 test\n> node dist/index.test.js && node dist/validation.test.js\n\n\n=== Registry Agents Cloud Function Tests ===\n\nHealth Endpoint:\n  PASS: Health returns 200\n  PASS: Health status is healthy\n  PASS: Lists all 3 agents\n  PASS: Includes execution_metadata\n  PASS: Service name is registry-agents\n  PASS: Has trace_id\n  PASS: Has execution_id\n  PASS: Has timestamp\n  PASS: Includes layers_executed\n  PASS: First layer is AGENT_ROUTING\n\nCORS Preflight:\n  PASS: OPTIONS returns 204\n  PASS: CORS origin header set\n  PASS: CORS methods include POST\n\nCORS on Responses:\n  PASS: Health response has CORS header\n\nCorrelation ID Propagation:\n  PASS: trace_id uses x-correlation-id\n\nRegistry Indexing Agent (/v1/registry/index):\n  PASS: Index returns 200\n  PASS: Indexed count matches input\n  PASS: Mode matches input\n  PASS: Has execution_metadata\n  PASS: Has 2 layers\n  PASS: First layer is AGENT_ROUTING\n  PASS: Second layer is REGISTRY_INDEX\n  PASS: Has duration_ms\n\nAgent Reputation Agent (/v1/registry/reputation):\n  PASS: Reputation returns 200\n  PASS: Agent ID matches input\n  PASS: Has overall_score\n  PASS: Layer is REGISTRY_REPUTATION\n\nTemplate Bootstrap Agent (/v1/registry/bootstrap):\n  PASS: Bootstrap returns 200\n  PASS: Agent name matches input\n  PASS: Template ID matches input\n  PASS: Status is created\n  PASS: Has health endpoint\n  PASS: Has invoke endpoint\n  PASS: Layer is REGISTRY_BOOTSTRAP\n\nValidation - Missing Required Field:\n  PASS: Returns 400 for missing field\n  PASS: Error mentions missing field\n  PASS: Error response has execution_metadata\n\nValidation - Unknown Field:\n  PASS: Returns 400 for unknown field\n  PASS: Error mentions unknown field\n\nMethod Not Allowed:\n  PASS: Returns 405 for GET on agent route\n  PASS: 405 response has execution_metadata\n\n404 Unknown Route:\n  PASS: Returns 404 for unknown route\n  PASS: Includes available_routes\n  PASS: 404 response has execution_metadata\n\nContracts Endpoint:\n  PASS: Contracts returns 200\n  PASS: Has index contract\n  PASS: Has reputation contract\n  PASS: Has bootstrap contract\n  PASS: Index has request schema\n  PASS: Index has response schema\n\n=== Results: 50 passed, 0 failed ===\n\n\n=== Registry Agents Contract Boundary Tests ===\n\n  PASS: rejects an invalid index mode\n  PASS: rejects an invalid index mode marks the agent layer failed\n  PASS: rejects a non-string asset ID\n  PASS: rejects a non-string asset ID marks the agent layer failed\n  PASS: requires signal for record\n  PASS: requires signal for record marks the agent layer failed\n  PASS: rejects an out-of-range reputation score\n  PASS: rejects an out-of-range reputation score marks the agent layer failed\n  PASS: rejects an invalid reputation category\n  PASS: rejects an invalid reputation category marks the agent layer failed\n  PASS: rejects an unknown nested signal field\n  PASS: rejects an unknown nested signal field marks the agent layer failed\n  PASS: rejects invalid bootstrap scalar types\n  PASS: rejects invalid bootstrap scalar types marks the agent layer failed\n  PASS: rejects an array used as config_overrides\n  PASS: rejects an array used as config_overrides marks the agent layer failed\n  PASS: preserves a valid reputation record request\n  PASS: accepts a valid request with an invalid correlation header\n  PASS: replaces an oversized correlation ID\n  PASS: returns 500 for an internal serialization failure\n  PASS: does not disclose internal error details\n\n=== Results: 21 passed, 0 failed ===\n\n",
+      "stderr": "npm warn Unknown env config \"http-proxy\". This will stop working in the next major version of npm.\nRegistry agent request failed {\n  agent: 'bootstrap',\n  execution_id: '69416d62-0932-48b5-bb25-2c1cc937b72f',\n  error_name: 'TypeError'\n}\n"
+    },
+    "1573536784aac073faa057fb876ba4996a32fea0": {
+      "exit": 0,
+      "stdout": "\n> registry-agents@1.0.0 test\n> node dist/index.test.js && node dist/validation.test.js && node tests/routing-http.cjs .\n\n\n=== Registry Agents Cloud Function Tests ===\n\nHealth Endpoint:\n  PASS: Health returns 200\n  PASS: Health status is healthy\n  PASS: Lists all 3 agents\n  PASS: Includes execution_metadata\n  PASS: Service name is registry-agents\n  PASS: Has trace_id\n  PASS: Has execution_id\n  PASS: Has timestamp\n  PASS: Includes layers_executed\n  PASS: First layer is AGENT_ROUTING\n\nCORS Preflight:\n  PASS: OPTIONS returns 204\n  PASS: CORS origin header set\n  PASS: CORS methods include POST\n\nCORS on Responses:\n  PASS: Health response has CORS header\n\nCorrelation ID Propagation:\n  PASS: trace_id uses x-correlation-id\n\nRegistry Indexing Agent (/v1/registry/index):\n  PASS: Index returns 200\n  PASS: Indexed count matches input\n  PASS: Mode matches input\n  PASS: Has execution_metadata\n  PASS: Has 2 layers\n  PASS: First layer is AGENT_ROUTING\n  PASS: Second layer is REGISTRY_INDEX\n  PASS: Has duration_ms\n\nAgent Reputation Agent (/v1/registry/reputation):\n  PASS: Reputation returns 200\n  PASS: Agent ID matches input\n  PASS: Has overall_score\n  PASS: Layer is REGISTRY_REPUTATION\n\nTemplate Bootstrap Agent (/v1/registry/bootstrap):\n  PASS: Bootstrap returns 200\n  PASS: Agent name matches input\n  PASS: Template ID matches input\n  PASS: Status is created\n  PASS: Has health endpoint\n  PASS: Has invoke endpoint\n  PASS: Layer is REGISTRY_BOOTSTRAP\n\nValidation - Missing Required Field:\n  PASS: Returns 400 for missing field\n  PASS: Error mentions missing field\n  PASS: Error response has execution_metadata\n\nValidation - Unknown Field:\n  PASS: Returns 400 for unknown field\n  PASS: Error mentions unknown field\n\nMethod Not Allowed:\n  PASS: Returns 405 for GET on agent route\n  PASS: 405 response has execution_metadata\n\n404 Unknown Route:\n  PASS: Returns 404 for unknown route\n  PASS: Includes available_routes\n  PASS: 404 response has execution_metadata\n\nContracts Endpoint:\n  PASS: Contracts returns 200\n  PASS: Has index contract\n  PASS: Has reputation contract\n  PASS: Has bootstrap contract\n  PASS: Index has request schema\n  PASS: Index has response schema\n\n=== Results: 50 passed, 0 failed ===\n\n\n=== Registry Agents Contract Boundary Tests ===\n\n  PASS: rejects an invalid index mode\n  PASS: rejects an invalid index mode marks the agent layer failed\n  PASS: rejects a non-string asset ID\n  PASS: rejects a non-string asset ID marks the agent layer failed\n  PASS: requires signal for record\n  PASS: requires signal for record marks the agent layer failed\n  PASS: rejects an out-of-range reputation score\n  PASS: rejects an out-of-range reputation score marks the agent layer failed\n  PASS: rejects an invalid reputation category\n  PASS: rejects an invalid reputation category marks the agent layer failed\n  PASS: rejects an unknown nested signal field\n  PASS: rejects an unknown nested signal field marks the agent layer failed\n  PASS: rejects invalid bootstrap scalar types\n  PASS: rejects invalid bootstrap scalar types marks the agent layer failed\n  PASS: rejects an array used as config_overrides\n  PASS: rejects an array used as config_overrides marks the agent layer failed\n  PASS: preserves a valid reputation record request\n  PASS: accepts a valid request with an invalid correlation header\n  PASS: replaces an oversized correlation ID\n  PASS: returns 500 for an internal serialization failure\n  PASS: does not disclose internal error details\n\n=== Results: 21 passed, 0 failed ===\n\n{\"holdout\":[true,true,true,true,true,true],\"anchors\":[true,true,true,true,true,true],\"statuses\":[200,200,200,200,200,200],\"exceptions\":0}\n",
+      "stderr": "npm warn Unknown env config \"http-proxy\". This will stop working in the next major version of npm.\nRegistry agent request failed {\n  agent: 'bootstrap',\n  execution_id: '87cad376-999a-43d2-8bdd-546aaf47e146',\n  error_name: 'TypeError'\n}\n"
+    }
+  },
+  "inverse": [
+    {
+      "path": "functions/src/index.ts",
+      "parentBytes": "import crypto from 'node:crypto';\nimport type { IncomingMessage, ServerResponse } from 'node:http';\nimport { handleIndex } from './agents/index-agent';\nimport { handleReputation } from './agents/reputation-agent';\nimport { handleBootstrap } from './agents/bootstrap-agent';\nimport { CONTRACT_SCHEMAS } from './contracts';\n\ninterface Request extends IncomingMessage {\n  body?: unknown;\n  path?: string;\n  method?: string;\n}\n\ninterface Response extends ServerResponse {\n  status?(code: number): Response;\n  json?(data: unknown): void;\n  send?(data: unknown): void;\n  set?(header: string, value: string): void;\n}\n\ninterface ExecutionMetadata {\n  trace_id: string;\n  timestamp: string;\n  service: string;\n  execution_id: string;\n}\n\ninterface LayerEntry {\n  layer: string;\n  status: 'completed' | 'failed';\n  duration_ms?: number;\n}\n\ninterface AgentResult {\n  data: unknown;\n  agent_layer: string;\n  duration_ms: number;\n}\n\ninterface JsonSchema {\n  type?: 'object' | 'array' | 'string' | 'number' | 'integer' | 'boolean';\n  required?: readonly string[];\n  properties?: Readonly<Record<string, JsonSchema>>;\n  items?: JsonSchema;\n  enum?: readonly unknown[];\n  minimum?: number;\n  maximum?: number;\n  additionalProperties?: boolean;\n}\n\nconst SERVICE_NAME = 'registry-agents';\nconst HEALTH_AGENTS = ['index', 'reputation', 'bootstrap'] as const;\nconst CORRELATION_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$/;\n\nconst CORS_HEADERS: Record<string, string> = {\n  'Access-Control-Allow-Origin': '*',\n  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',\n  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Correlation-Id',\n  'Access-Control-Max-Age': '3600',\n};\n\nfunction buildExecutionMetadata(req: Request): ExecutionMetadata {\n  const header = req.headers['x-correlation-id'];\n  const candidate = Array.isArray(header) ? header[0] : header;\n  const traceId = candidate && CORRELATION_ID_PATTERN.test(candidate)\n    ? candidate\n    : crypto.randomUUID();\n\n  return {\n    trace_id: traceId,\n    timestamp: new Date().toISOString(),\n    service: SERVICE_NAME,\n    execution_id: crypto.randomUUID(),\n  };\n}\n\nfunction applyCors(res: Response): void {\n  for (const [key, value] of Object.entries(CORS_HEADERS)) {\n    res.setHeader(key, value);\n  }\n}\n\nfunction sendJson(res: Response, statusCode: number, body: unknown): void {\n  res.writeHead(statusCode, { 'Content-Type': 'application/json' });\n  res.end(JSON.stringify(body));\n}\n\nfunction getRequestPath(req: Request): string {\n  return req.path || new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`).pathname;\n}\n\nfunction schemaTypeMatches(value: unknown, type: JsonSchema['type']): boolean {\n  switch (type) {\n    case 'object':\n      return value !== null && typeof value === 'object' && !Array.isArray(value);\n    case 'array':\n      return Array.isArray(value);\n    case 'number':\n      return typeof value === 'number' && Number.isFinite(value);\n    case 'integer':\n      return typeof value === 'number' && Number.isInteger(value);\n    case 'string':\n    case 'boolean':\n      return typeof value === type;\n    default:\n      return true;\n  }\n}\n\nfunction validateSchema(value: unknown, schema: JsonSchema, path: string): string | null {\n  if (!schemaTypeMatches(value, schema.type)) {\n    return `${path} must be of type ${schema.type}`;\n  }\n\n  if (schema.enum && !schema.enum.some((candidate) => Object.is(candidate, value))) {\n    return `${path} must be one of: ${schema.enum.join(', ')}`;\n  }\n\n  if (typeof value === 'number') {\n    if (schema.minimum !== undefined && value < schema.minimum) {\n      return `${path} must be at least ${schema.minimum}`;\n    }\n    if (schema.maximum !== undefined && value > schema.maximum) {\n      return `${path} must be at most ${schema.maximum}`;\n    }\n  }\n\n  if (Array.isArray(value) && schema.items) {\n    for (let index = 0; index < value.length; index++) {\n      const error = validateSchema(value[index], schema.items, `${path}[${index}]`);\n      if (error) return error;\n    }\n  }\n\n  if (value !== null && typeof value === 'object' && !Array.isArray(value)) {\n    const objectValue = value as Record<string, unknown>;\n    const properties = schema.properties || {};\n\n    for (const field of schema.required || []) {\n      if (!Object.prototype.hasOwnProperty.call(objectValue, field)) {\n        return `Missing required field: ${path === 'body' ? field : `${path}.${field}`}`;\n      }\n    }\n\n    if (schema.additionalProperties === false) {\n      for (const key of Object.keys(objectValue)) {\n        if (!Object.prototype.hasOwnProperty.call(properties, key)) {\n          return `Unknown field: ${path === 'body' ? key : `${path}.${key}`}`;\n        }\n      }\n    }\n\n    for (const [key, propertySchema] of Object.entries(properties)) {\n      if (Object.prototype.hasOwnProperty.call(objectValue, key)) {\n        const error = validateSchema(objectValue[key], propertySchema, `${path}.${key}`);\n        if (error) return error;\n      }\n    }\n  }\n\n  return null;\n}\n\nfunction validateRequestBody(body: unknown, schemaName: keyof typeof CONTRACT_SCHEMAS): string | null {\n  const schema = CONTRACT_SCHEMAS[schemaName].request as JsonSchema;\n  const error = validateSchema(body, schema, 'body');\n  if (error) return error;\n\n  if (schemaName === 'reputation') {\n    const request = body as Record<string, unknown>;\n    if (request.operation === 'record' && !Object.prototype.hasOwnProperty.call(request, 'signal')) {\n      return 'Missing required field: signal';\n    }\n  }\n\n  return null;\n}\n\nasync function routeAgent(agentName: string, body: unknown): Promise<AgentResult> {\n  const start = performance.now();\n  let data: unknown;\n\n  switch (agentName) {\n    case 'index':\n      data = await handleIndex(body as any);\n      break;\n    case 'reputation':\n      data = await handleReputation(body as any);\n      break;\n    case 'bootstrap':\n      data = await handleBootstrap(body as any);\n      break;\n    default:\n      throw new Error(`Unknown agent: ${agentName}`);\n  }\n\n  return {\n    data,\n    agent_layer: `REGISTRY_${agentName.toUpperCase()}`,\n    duration_ms: Math.round(performance.now() - start),\n  };\n}\n\nfunction handleHealth(req: Request, res: Response): void {\n  const metadata = buildExecutionMetadata(req);\n\n  sendJson(res, 200, {\n    status: 'healthy',\n    agents: HEALTH_AGENTS,\n    execution_metadata: metadata,\n    layers_executed: [{ layer: 'AGENT_ROUTING', status: 'completed' }],\n  });\n}\n\nfunction handleContracts(req: Request, res: Response): void {\n  const metadata = buildExecutionMetadata(req);\n\n  sendJson(res, 200, {\n    contracts: CONTRACT_SCHEMAS,\n    execution_metadata: metadata,\n    layers_executed: [{ layer: 'AGENT_ROUTING', status: 'completed' }],\n  });\n}\n\nasync function handleAgentRequest(agentName: string, req: Request, res: Response): Promise<void> {\n  const metadata = buildExecutionMetadata(req);\n  const layers: LayerEntry[] = [{ layer: 'AGENT_ROUTING', status: 'completed' }];\n\n  if (req.method !== 'POST') {\n    sendJson(res, 405, {\n      error: 'Method not allowed. Use POST.',\n      execution_metadata: metadata,\n      layers_executed: layers,\n    });\n    return;\n  }\n\n  const validationError = validateRequestBody(\n    req.body,\n    agentName as keyof typeof CONTRACT_SCHEMAS,\n  );\n  if (validationError) {\n    layers.push({ layer: `REGISTRY_${agentName.toUpperCase()}`, status: 'failed', duration_ms: 0 });\n    sendJson(res, 400, {\n      error: validationError,\n      execution_metadata: metadata,\n      layers_executed: layers,\n    });\n    return;\n  }\n\n  try {\n    const result = await routeAgent(agentName, req.body);\n    layers.push({\n      layer: result.agent_layer,\n      status: 'completed',\n      duration_ms: result.duration_ms,\n    });\n\n    sendJson(res, 200, {\n      data: result.data,\n      execution_metadata: metadata,\n      layers_executed: layers,\n    });\n  } catch (err: unknown) {\n    console.error('Registry agent request failed', {\n      agent: agentName,\n      execution_id: metadata.execution_id,\n      error_name: err instanceof Error ? err.name : 'UnknownError',\n    });\n    layers.push({\n      layer: `REGISTRY_${agentName.toUpperCase()}`,\n      status: 'failed',\n      duration_ms: 0,\n    });\n\n    sendJson(res, 500, {\n      error: 'Internal agent error',\n      execution_metadata: metadata,\n      layers_executed: layers,\n    });\n  }\n}\n\nconst AGENT_ROUTES: Record<string, string> = {\n  '/v1/registry/index': 'index',\n  '/v1/registry/reputation': 'reputation',\n  '/v1/registry/bootstrap': 'bootstrap',\n};\n\nexport const handler = async (req: Request, res: Response): Promise<void> => {\n  applyCors(res);\n\n  if (req.method === 'OPTIONS') {\n    res.writeHead(204);\n    res.end();\n    return;\n  }\n\n  const path = getRequestPath(req);\n\n  if (path === '/health' || path === '/') {\n    handleHealth(req, res);\n    return;\n  }\n\n  if (path === '/contracts') {\n    handleContracts(req, res);\n    return;\n  }\n\n  const agentName = AGENT_ROUTES[path];\n  if (agentName) {\n    await handleAgentRequest(agentName, req, res);\n    return;\n  }\n\n  const metadata = buildExecutionMetadata(req);\n  sendJson(res, 404, {\n    error: `Route not found: ${path}`,\n    available_routes: ['/health', '/contracts', ...Object.keys(AGENT_ROUTES)],\n    execution_metadata: metadata,\n    layers_executed: [{ layer: 'AGENT_ROUTING', status: 'failed' }],\n  });\n};\n",
+      "sha256": "a52972f9360f0447856ea7ad7bc68b6efcd60cbf88560de52b498238e9e2c8d7"
+    },
+    {
+      "path": "functions/dist/index.js",
+      "parentBytes": "\"use strict\";\nvar __importDefault = (this && this.__importDefault) || function (mod) {\n    return (mod && mod.__esModule) ? mod : { \"default\": mod };\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.handler = void 0;\nconst node_crypto_1 = __importDefault(require(\"node:crypto\"));\nconst index_agent_1 = require(\"./agents/index-agent\");\nconst reputation_agent_1 = require(\"./agents/reputation-agent\");\nconst bootstrap_agent_1 = require(\"./agents/bootstrap-agent\");\nconst contracts_1 = require(\"./contracts\");\nconst SERVICE_NAME = 'registry-agents';\nconst HEALTH_AGENTS = ['index', 'reputation', 'bootstrap'];\nconst CORRELATION_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$/;\nconst CORS_HEADERS = {\n    'Access-Control-Allow-Origin': '*',\n    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',\n    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Correlation-Id',\n    'Access-Control-Max-Age': '3600',\n};\nfunction buildExecutionMetadata(req) {\n    const header = req.headers['x-correlation-id'];\n    const candidate = Array.isArray(header) ? header[0] : header;\n    const traceId = candidate && CORRELATION_ID_PATTERN.test(candidate)\n        ? candidate\n        : node_crypto_1.default.randomUUID();\n    return {\n        trace_id: traceId,\n        timestamp: new Date().toISOString(),\n        service: SERVICE_NAME,\n        execution_id: node_crypto_1.default.randomUUID(),\n    };\n}\nfunction applyCors(res) {\n    for (const [key, value] of Object.entries(CORS_HEADERS)) {\n        res.setHeader(key, value);\n    }\n}\nfunction sendJson(res, statusCode, body) {\n    res.writeHead(statusCode, { 'Content-Type': 'application/json' });\n    res.end(JSON.stringify(body));\n}\nfunction getRequestPath(req) {\n    return req.path || new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`).pathname;\n}\nfunction schemaTypeMatches(value, type) {\n    switch (type) {\n        case 'object':\n            return value !== null && typeof value === 'object' && !Array.isArray(value);\n        case 'array':\n            return Array.isArray(value);\n        case 'number':\n            return typeof value === 'number' && Number.isFinite(value);\n        case 'integer':\n            return typeof value === 'number' && Number.isInteger(value);\n        case 'string':\n        case 'boolean':\n            return typeof value === type;\n        default:\n            return true;\n    }\n}\nfunction validateSchema(value, schema, path) {\n    if (!schemaTypeMatches(value, schema.type)) {\n        return `${path} must be of type ${schema.type}`;\n    }\n    if (schema.enum && !schema.enum.some((candidate) => Object.is(candidate, value))) {\n        return `${path} must be one of: ${schema.enum.join(', ')}`;\n    }\n    if (typeof value === 'number') {\n        if (schema.minimum !== undefined && value < schema.minimum) {\n            return `${path} must be at least ${schema.minimum}`;\n        }\n        if (schema.maximum !== undefined && value > schema.maximum) {\n            return `${path} must be at most ${schema.maximum}`;\n        }\n    }\n    if (Array.isArray(value) && schema.items) {\n        for (let index = 0; index < value.length; index++) {\n            const error = validateSchema(value[index], schema.items, `${path}[${index}]`);\n            if (error)\n                return error;\n        }\n    }\n    if (value !== null && typeof value === 'object' && !Array.isArray(value)) {\n        const objectValue = value;\n        const properties = schema.properties || {};\n        for (const field of schema.required || []) {\n            if (!Object.prototype.hasOwnProperty.call(objectValue, field)) {\n                return `Missing required field: ${path === 'body' ? field : `${path}.${field}`}`;\n            }\n        }\n        if (schema.additionalProperties === false) {\n            for (const key of Object.keys(objectValue)) {\n                if (!Object.prototype.hasOwnProperty.call(properties, key)) {\n                    return `Unknown field: ${path === 'body' ? key : `${path}.${key}`}`;\n                }\n            }\n        }\n        for (const [key, propertySchema] of Object.entries(properties)) {\n            if (Object.prototype.hasOwnProperty.call(objectValue, key)) {\n                const error = validateSchema(objectValue[key], propertySchema, `${path}.${key}`);\n                if (error)\n                    return error;\n            }\n        }\n    }\n    return null;\n}\nfunction validateRequestBody(body, schemaName) {\n    const schema = contracts_1.CONTRACT_SCHEMAS[schemaName].request;\n    const error = validateSchema(body, schema, 'body');\n    if (error)\n        return error;\n    if (schemaName === 'reputation') {\n        const request = body;\n        if (request.operation === 'record' && !Object.prototype.hasOwnProperty.call(request, 'signal')) {\n            return 'Missing required field: signal';\n        }\n    }\n    return null;\n}\nasync function routeAgent(agentName, body) {\n    const start = performance.now();\n    let data;\n    switch (agentName) {\n        case 'index':\n            data = await (0, index_agent_1.handleIndex)(body);\n            break;\n        case 'reputation':\n            data = await (0, reputation_agent_1.handleReputation)(body);\n            break;\n        case 'bootstrap':\n            data = await (0, bootstrap_agent_1.handleBootstrap)(body);\n            break;\n        default:\n            throw new Error(`Unknown agent: ${agentName}`);\n    }\n    return {\n        data,\n        agent_layer: `REGISTRY_${agentName.toUpperCase()}`,\n        duration_ms: Math.round(performance.now() - start),\n    };\n}\nfunction handleHealth(req, res) {\n    const metadata = buildExecutionMetadata(req);\n    sendJson(res, 200, {\n        status: 'healthy',\n        agents: HEALTH_AGENTS,\n        execution_metadata: metadata,\n        layers_executed: [{ layer: 'AGENT_ROUTING', status: 'completed' }],\n    });\n}\nfunction handleContracts(req, res) {\n    const metadata = buildExecutionMetadata(req);\n    sendJson(res, 200, {\n        contracts: contracts_1.CONTRACT_SCHEMAS,\n        execution_metadata: metadata,\n        layers_executed: [{ layer: 'AGENT_ROUTING', status: 'completed' }],\n    });\n}\nasync function handleAgentRequest(agentName, req, res) {\n    const metadata = buildExecutionMetadata(req);\n    const layers = [{ layer: 'AGENT_ROUTING', status: 'completed' }];\n    if (req.method !== 'POST') {\n        sendJson(res, 405, {\n            error: 'Method not allowed. Use POST.',\n            execution_metadata: metadata,\n            layers_executed: layers,\n        });\n        return;\n    }\n    const validationError = validateRequestBody(req.body, agentName);\n    if (validationError) {\n        layers.push({ layer: `REGISTRY_${agentName.toUpperCase()}`, status: 'failed', duration_ms: 0 });\n        sendJson(res, 400, {\n            error: validationError,\n            execution_metadata: metadata,\n            layers_executed: layers,\n        });\n        return;\n    }\n    try {\n        const result = await routeAgent(agentName, req.body);\n        layers.push({\n            layer: result.agent_layer,\n            status: 'completed',\n            duration_ms: result.duration_ms,\n        });\n        sendJson(res, 200, {\n            data: result.data,\n            execution_metadata: metadata,\n            layers_executed: layers,\n        });\n    }\n    catch (err) {\n        console.error('Registry agent request failed', {\n            agent: agentName,\n            execution_id: metadata.execution_id,\n            error_name: err instanceof Error ? err.name : 'UnknownError',\n        });\n        layers.push({\n            layer: `REGISTRY_${agentName.toUpperCase()}`,\n            status: 'failed',\n            duration_ms: 0,\n        });\n        sendJson(res, 500, {\n            error: 'Internal agent error',\n            execution_metadata: metadata,\n            layers_executed: layers,\n        });\n    }\n}\nconst AGENT_ROUTES = {\n    '/v1/registry/index': 'index',\n    '/v1/registry/reputation': 'reputation',\n    '/v1/registry/bootstrap': 'bootstrap',\n};\nconst handler = async (req, res) => {\n    applyCors(res);\n    if (req.method === 'OPTIONS') {\n        res.writeHead(204);\n        res.end();\n        return;\n    }\n    const path = getRequestPath(req);\n    if (path === '/health' || path === '/') {\n        handleHealth(req, res);\n        return;\n    }\n    if (path === '/contracts') {\n        handleContracts(req, res);\n        return;\n    }\n    const agentName = AGENT_ROUTES[path];\n    if (agentName) {\n        await handleAgentRequest(agentName, req, res);\n        return;\n    }\n    const metadata = buildExecutionMetadata(req);\n    sendJson(res, 404, {\n        error: `Route not found: ${path}`,\n        available_routes: ['/health', '/contracts', ...Object.keys(AGENT_ROUTES)],\n        execution_metadata: metadata,\n        layers_executed: [{ layer: 'AGENT_ROUTING', status: 'failed' }],\n    });\n};\nexports.handler = handler;\n//# sourceMappingURL=index.js.map",
+      "sha256": "702b803f7b1b7dd36122da1f6b2c4811156dd1ace368562f41efb04d288bf74b"
+    },
+    {
+      "path": "functions/dist/index.js.map",
+      "parentBytes": "{\"version\":3,\"file\":\"index.js\",\"sourceRoot\":\"\",\"sources\":[\"../src/index.ts\"],\"names\":[],\"mappings\":\"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\"}",
+      "sha256": "74c8be4d7768650f6c6528faf9507369a569572eaf7de8b253a38f90f1c43094"
+    },
+    {
+      "path": "functions/dist/index.d.ts.map",
+      "parentBytes": "{\"version\":3,\"file\":\"index.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../src/index.ts\"],\"names\":[],\"mappings\":\"AACA,OAAO,KAAK,EAAE,eAAe,EAAE,cAAc,EAAE,MAAM,WAAW,CAAC;AAMjE,UAAU,OAAQ,SAAQ,eAAe;IACvC,IAAI,CAAC,EAAE,OAAO,CAAC;IACf,IAAI,CAAC,EAAE,MAAM,CAAC;IACd,MAAM,CAAC,EAAE,MAAM,CAAC;CACjB;AAED,UAAU,QAAS,SAAQ,cAAc;IACvC,MAAM,CAAC,CAAC,IAAI,EAAE,MAAM,GAAG,QAAQ,CAAC;IAChC,IAAI,CAAC,CAAC,IAAI,EAAE,OAAO,GAAG,IAAI,CAAC;IAC3B,IAAI,CAAC,CAAC,IAAI,EAAE,OAAO,GAAG,IAAI,CAAC;IAC3B,GAAG,CAAC,CAAC,MAAM,EAAE,MAAM,EAAE,KAAK,EAAE,MAAM,GAAG,IAAI,CAAC;CAC3C;AAgRD,eAAO,MAAM,OAAO,GAAU,KAAK,OAAO,EAAE,KAAK,QAAQ,KAAG,OAAO,CAAC,IAAI,CAkCvE,CAAC\"}",
+      "sha256": "59140a29569b49e4296dc8978278f92894c2a04b518094a06b0009da8edc6834"
+    },
+    {
+      "path": "functions/package.json",
+      "parentBytes": "{\n  \"name\": \"registry-agents\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Cloud Function entry point for Registry Agents (index, reputation, bootstrap)\",\n  \"main\": \"dist/index.js\",\n  \"scripts\": {\n    \"build\": \"tsc -p tsconfig.json\",\n    \"gcp-build\": \"\",\n    \"start\": \"npx functions-framework --target=handler --source=dist\",\n    \"test\": \"node dist/index.test.js && node dist/validation.test.js\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"engines\": {\n    \"node\": \">=20\"\n  },\n  \"dependencies\": {\n    \"@google-cloud/functions-framework\": \"^3.3.0\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"^20.11.0\",\n    \"typescript\": \"^5.3.3\"\n  }\n}\n",
+      "sha256": "7ea7c62a08c1a2ee8bdccb55b6d9dca5e9ed770555fafd159e9c7e8e40e83f77"
+    },
+    {
+      "path": ".github/workflows/registry-agents.yml",
+      "parentBytes": "name: Registry Agents Quality\n\non:\n  pull_request:\n    paths:\n      - 'functions/**'\n      - '.github/workflows/registry-agents.yml'\n  push:\n    branches: [main]\n    paths:\n      - 'functions/**'\n      - '.github/workflows/registry-agents.yml'\n\npermissions:\n  contents: read\n\nconcurrency:\n  group: registry-agents-${{ github.workflow }}-${{ github.ref }}\n  cancel-in-progress: true\n\njobs:\n  validate:\n    name: Build, test, typecheck, audit\n    runs-on: ubuntu-24.04\n    timeout-minutes: 10\n    defaults:\n      run:\n        working-directory: functions\n    steps:\n      - name: Check out repository\n        uses: actions/checkout@v4\n\n      - name: Set up Node.js\n        uses: actions/setup-node@v4\n        with:\n          node-version: '20'\n          cache: npm\n          cache-dependency-path: functions/package-lock.json\n\n      - name: Install locked dependencies\n        run: npm ci --ignore-scripts\n\n      - name: Build\n        run: npm run build\n\n      - name: Test\n        run: npm test\n\n      - name: Typecheck\n        run: npm run typecheck\n\n      - name: Audit production dependencies\n        run: npm audit --omit=dev --audit-level=high\n",
+      "sha256": "107da9dba8b013ec2eee2bb880c69eaa78f7ef8cb880e28e7b0aa579a8536e08"
+    }
+  ],
+  "measurements": [
+    {
+      "revision": "489c613b148b8392d07e8c4f497c038d56a71b14",
+      "suite": "holdout",
+      "report": {
+        "holdout": [
+          false,
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "anchors": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "statuses": [
+          599,
+          200,
+          599,
+          599,
+          599,
+          599
+        ],
+        "exceptions": 5
+      },
+      "score": {
+        "primary": 0.16666666666666666,
+        "itemWins": [
+          false,
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "noopRate": 0,
+        "costPerWin": 0,
+        "regressed": true
+      }
+    },
+    {
+      "revision": "489c613b148b8392d07e8c4f497c038d56a71b14",
+      "suite": "anchors",
+      "report": {
+        "holdout": [
+          false,
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "anchors": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "statuses": [
+          599,
+          200,
+          599,
+          599,
+          599,
+          599
+        ],
+        "exceptions": 5
+      },
+      "score": {
+        "primary": 1,
+        "itemWins": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "noopRate": 0,
+        "costPerWin": 0,
+        "regressed": true
+      }
+    },
+    {
+      "revision": "1573536784aac073faa057fb876ba4996a32fea0",
+      "suite": "holdout",
+      "report": {
+        "holdout": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "anchors": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "statuses": [
+          200,
+          200,
+          200,
+          200,
+          200,
+          200
+        ],
+        "exceptions": 0
+      },
+      "score": {
+        "primary": 1,
+        "itemWins": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "noopRate": 0,
+        "costPerWin": 0,
+        "regressed": true
+      }
+    }
+  ],
+  "result": {
+    "liftCurve": [
+      {
+        "generation": 0,
+        "primary": 0.16666666666666666,
+        "delta": 0,
+        "anchor": 1
+      }
+    ],
+    "promotions": [],
+    "lineage": {
+      "commits": {}
+    },
+    "replayBundle": {
+      "data_source": "LIVE_NATIVE_HTTP",
+      "root_id": "root",
+      "chain": [
+        {
+          "id": "root",
+          "generation": 0,
+          "parents": [],
+          "mutation": null,
+          "primaryDelta": 0,
+          "anchorScore": 1,
+          "verdict": "ROOT",
+          "failureReasons": [],
+          "receipt": {
+            "payload": {
+              "kind": "root",
+              "root": "root"
+            },
+            "signature": "KppmC8us8YzRTtKlAWj/6xdZYQSqizBggT0e6JuCzcnCKR0T+BxZKmcq0cH4avwJWQTOBEqqfkjaDA2DMhNDDg==",
+            "publicKey": "MCowBQYDK2VwAyEA91OTcMEeGQ1uQxMJTJLGaqIzQs0wPGj/uxL3CrSTRQY=",
+            "alg": "ed25519"
+          },
+          "createdAt": "gen-0"
+        }
+      ],
+      "all_commits": [
+        {
+          "id": "root__revision_gen1",
+          "generation": 1,
+          "parents": [
+            "root"
+          ],
+          "mutation": {
+            "target": "revision",
+            "summary": "Host-independent native handler pathname routing",
+            "inverse": [
+              {
+                "path": "functions/src/index.ts",
+                "parentBytes": "import crypto from 'node:crypto';\nimport type { IncomingMessage, ServerResponse } from 'node:http';\nimport { handleIndex } from './agents/index-agent';\nimport { handleReputation } from './agents/reputation-agent';\nimport { handleBootstrap } from './agents/bootstrap-agent';\nimport { CONTRACT_SCHEMAS } from './contracts';\n\ninterface Request extends IncomingMessage {\n  body?: unknown;\n  path?: string;\n  method?: string;\n}\n\ninterface Response extends ServerResponse {\n  status?(code: number): Response;\n  json?(data: unknown): void;\n  send?(data: unknown): void;\n  set?(header: string, value: string): void;\n}\n\ninterface ExecutionMetadata {\n  trace_id: string;\n  timestamp: string;\n  service: string;\n  execution_id: string;\n}\n\ninterface LayerEntry {\n  layer: string;\n  status: 'completed' | 'failed';\n  duration_ms?: number;\n}\n\ninterface AgentResult {\n  data: unknown;\n  agent_layer: string;\n  duration_ms: number;\n}\n\ninterface JsonSchema {\n  type?: 'object' | 'array' | 'string' | 'number' | 'integer' | 'boolean';\n  required?: readonly string[];\n  properties?: Readonly<Record<string, JsonSchema>>;\n  items?: JsonSchema;\n  enum?: readonly unknown[];\n  minimum?: number;\n  maximum?: number;\n  additionalProperties?: boolean;\n}\n\nconst SERVICE_NAME = 'registry-agents';\nconst HEALTH_AGENTS = ['index', 'reputation', 'bootstrap'] as const;\nconst CORRELATION_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$/;\n\nconst CORS_HEADERS: Record<string, string> = {\n  'Access-Control-Allow-Origin': '*',\n  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',\n  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Correlation-Id',\n  'Access-Control-Max-Age': '3600',\n};\n\nfunction buildExecutionMetadata(req: Request): ExecutionMetadata {\n  const header = req.headers['x-correlation-id'];\n  const candidate = Array.isArray(header) ? header[0] : header;\n  const traceId = candidate && CORRELATION_ID_PATTERN.test(candidate)\n    ? candidate\n    : crypto.randomUUID();\n\n  return {\n    trace_id: traceId,\n    timestamp: new Date().toISOString(),\n    service: SERVICE_NAME,\n    execution_id: crypto.randomUUID(),\n  };\n}\n\nfunction applyCors(res: Response): void {\n  for (const [key, value] of Object.entries(CORS_HEADERS)) {\n    res.setHeader(key, value);\n  }\n}\n\nfunction sendJson(res: Response, statusCode: number, body: unknown): void {\n  res.writeHead(statusCode, { 'Content-Type': 'application/json' });\n  res.end(JSON.stringify(body));\n}\n\nfunction getRequestPath(req: Request): string {\n  return req.path || new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`).pathname;\n}\n\nfunction schemaTypeMatches(value: unknown, type: JsonSchema['type']): boolean {\n  switch (type) {\n    case 'object':\n      return value !== null && typeof value === 'object' && !Array.isArray(value);\n    case 'array':\n      return Array.isArray(value);\n    case 'number':\n      return typeof value === 'number' && Number.isFinite(value);\n    case 'integer':\n      return typeof value === 'number' && Number.isInteger(value);\n    case 'string':\n    case 'boolean':\n      return typeof value === type;\n    default:\n      return true;\n  }\n}\n\nfunction validateSchema(value: unknown, schema: JsonSchema, path: string): string | null {\n  if (!schemaTypeMatches(value, schema.type)) {\n    return `${path} must be of type ${schema.type}`;\n  }\n\n  if (schema.enum && !schema.enum.some((candidate) => Object.is(candidate, value))) {\n    return `${path} must be one of: ${schema.enum.join(', ')}`;\n  }\n\n  if (typeof value === 'number') {\n    if (schema.minimum !== undefined && value < schema.minimum) {\n      return `${path} must be at least ${schema.minimum}`;\n    }\n    if (schema.maximum !== undefined && value > schema.maximum) {\n      return `${path} must be at most ${schema.maximum}`;\n    }\n  }\n\n  if (Array.isArray(value) && schema.items) {\n    for (let index = 0; index < value.length; index++) {\n      const error = validateSchema(value[index], schema.items, `${path}[${index}]`);\n      if (error) return error;\n    }\n  }\n\n  if (value !== null && typeof value === 'object' && !Array.isArray(value)) {\n    const objectValue = value as Record<string, unknown>;\n    const properties = schema.properties || {};\n\n    for (const field of schema.required || []) {\n      if (!Object.prototype.hasOwnProperty.call(objectValue, field)) {\n        return `Missing required field: ${path === 'body' ? field : `${path}.${field}`}`;\n      }\n    }\n\n    if (schema.additionalProperties === false) {\n      for (const key of Object.keys(objectValue)) {\n        if (!Object.prototype.hasOwnProperty.call(properties, key)) {\n          return `Unknown field: ${path === 'body' ? key : `${path}.${key}`}`;\n        }\n      }\n    }\n\n    for (const [key, propertySchema] of Object.entries(properties)) {\n      if (Object.prototype.hasOwnProperty.call(objectValue, key)) {\n        const error = validateSchema(objectValue[key], propertySchema, `${path}.${key}`);\n        if (error) return error;\n      }\n    }\n  }\n\n  return null;\n}\n\nfunction validateRequestBody(body: unknown, schemaName: keyof typeof CONTRACT_SCHEMAS): string | null {\n  const schema = CONTRACT_SCHEMAS[schemaName].request as JsonSchema;\n  const error = validateSchema(body, schema, 'body');\n  if (error) return error;\n\n  if (schemaName === 'reputation') {\n    const request = body as Record<string, unknown>;\n    if (request.operation === 'record' && !Object.prototype.hasOwnProperty.call(request, 'signal')) {\n      return 'Missing required field: signal';\n    }\n  }\n\n  return null;\n}\n\nasync function routeAgent(agentName: string, body: unknown): Promise<AgentResult> {\n  const start = performance.now();\n  let data: unknown;\n\n  switch (agentName) {\n    case 'index':\n      data = await handleIndex(body as any);\n      break;\n    case 'reputation':\n      data = await handleReputation(body as any);\n      break;\n    case 'bootstrap':\n      data = await handleBootstrap(body as any);\n      break;\n    default:\n      throw new Error(`Unknown agent: ${agentName}`);\n  }\n\n  return {\n    data,\n    agent_layer: `REGISTRY_${agentName.toUpperCase()}`,\n    duration_ms: Math.round(performance.now() - start),\n  };\n}\n\nfunction handleHealth(req: Request, res: Response): void {\n  const metadata = buildExecutionMetadata(req);\n\n  sendJson(res, 200, {\n    status: 'healthy',\n    agents: HEALTH_AGENTS,\n    execution_metadata: metadata,\n    layers_executed: [{ layer: 'AGENT_ROUTING', status: 'completed' }],\n  });\n}\n\nfunction handleContracts(req: Request, res: Response): void {\n  const metadata = buildExecutionMetadata(req);\n\n  sendJson(res, 200, {\n    contracts: CONTRACT_SCHEMAS,\n    execution_metadata: metadata,\n    layers_executed: [{ layer: 'AGENT_ROUTING', status: 'completed' }],\n  });\n}\n\nasync function handleAgentRequest(agentName: string, req: Request, res: Response): Promise<void> {\n  const metadata = buildExecutionMetadata(req);\n  const layers: LayerEntry[] = [{ layer: 'AGENT_ROUTING', status: 'completed' }];\n\n  if (req.method !== 'POST') {\n    sendJson(res, 405, {\n      error: 'Method not allowed. Use POST.',\n      execution_metadata: metadata,\n      layers_executed: layers,\n    });\n    return;\n  }\n\n  const validationError = validateRequestBody(\n    req.body,\n    agentName as keyof typeof CONTRACT_SCHEMAS,\n  );\n  if (validationError) {\n    layers.push({ layer: `REGISTRY_${agentName.toUpperCase()}`, status: 'failed', duration_ms: 0 });\n    sendJson(res, 400, {\n      error: validationError,\n      execution_metadata: metadata,\n      layers_executed: layers,\n    });\n    return;\n  }\n\n  try {\n    const result = await routeAgent(agentName, req.body);\n    layers.push({\n      layer: result.agent_layer,\n      status: 'completed',\n      duration_ms: result.duration_ms,\n    });\n\n    sendJson(res, 200, {\n      data: result.data,\n      execution_metadata: metadata,\n      layers_executed: layers,\n    });\n  } catch (err: unknown) {\n    console.error('Registry agent request failed', {\n      agent: agentName,\n      execution_id: metadata.execution_id,\n      error_name: err instanceof Error ? err.name : 'UnknownError',\n    });\n    layers.push({\n      layer: `REGISTRY_${agentName.toUpperCase()}`,\n      status: 'failed',\n      duration_ms: 0,\n    });\n\n    sendJson(res, 500, {\n      error: 'Internal agent error',\n      execution_metadata: metadata,\n      layers_executed: layers,\n    });\n  }\n}\n\nconst AGENT_ROUTES: Record<string, string> = {\n  '/v1/registry/index': 'index',\n  '/v1/registry/reputation': 'reputation',\n  '/v1/registry/bootstrap': 'bootstrap',\n};\n\nexport const handler = async (req: Request, res: Response): Promise<void> => {\n  applyCors(res);\n\n  if (req.method === 'OPTIONS') {\n    res.writeHead(204);\n    res.end();\n    return;\n  }\n\n  const path = getRequestPath(req);\n\n  if (path === '/health' || path === '/') {\n    handleHealth(req, res);\n    return;\n  }\n\n  if (path === '/contracts') {\n    handleContracts(req, res);\n    return;\n  }\n\n  const agentName = AGENT_ROUTES[path];\n  if (agentName) {\n    await handleAgentRequest(agentName, req, res);\n    return;\n  }\n\n  const metadata = buildExecutionMetadata(req);\n  sendJson(res, 404, {\n    error: `Route not found: ${path}`,\n    available_routes: ['/health', '/contracts', ...Object.keys(AGENT_ROUTES)],\n    execution_metadata: metadata,\n    layers_executed: [{ layer: 'AGENT_ROUTING', status: 'failed' }],\n  });\n};\n",
+                "sha256": "a52972f9360f0447856ea7ad7bc68b6efcd60cbf88560de52b498238e9e2c8d7"
+              },
+              {
+                "path": "functions/dist/index.js",
+                "parentBytes": "\"use strict\";\nvar __importDefault = (this && this.__importDefault) || function (mod) {\n    return (mod && mod.__esModule) ? mod : { \"default\": mod };\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.handler = void 0;\nconst node_crypto_1 = __importDefault(require(\"node:crypto\"));\nconst index_agent_1 = require(\"./agents/index-agent\");\nconst reputation_agent_1 = require(\"./agents/reputation-agent\");\nconst bootstrap_agent_1 = require(\"./agents/bootstrap-agent\");\nconst contracts_1 = require(\"./contracts\");\nconst SERVICE_NAME = 'registry-agents';\nconst HEALTH_AGENTS = ['index', 'reputation', 'bootstrap'];\nconst CORRELATION_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$/;\nconst CORS_HEADERS = {\n    'Access-Control-Allow-Origin': '*',\n    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',\n    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Correlation-Id',\n    'Access-Control-Max-Age': '3600',\n};\nfunction buildExecutionMetadata(req) {\n    const header = req.headers['x-correlation-id'];\n    const candidate = Array.isArray(header) ? header[0] : header;\n    const traceId = candidate && CORRELATION_ID_PATTERN.test(candidate)\n        ? candidate\n        : node_crypto_1.default.randomUUID();\n    return {\n        trace_id: traceId,\n        timestamp: new Date().toISOString(),\n        service: SERVICE_NAME,\n        execution_id: node_crypto_1.default.randomUUID(),\n    };\n}\nfunction applyCors(res) {\n    for (const [key, value] of Object.entries(CORS_HEADERS)) {\n        res.setHeader(key, value);\n    }\n}\nfunction sendJson(res, statusCode, body) {\n    res.writeHead(statusCode, { 'Content-Type': 'application/json' });\n    res.end(JSON.stringify(body));\n}\nfunction getRequestPath(req) {\n    return req.path || new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`).pathname;\n}\nfunction schemaTypeMatches(value, type) {\n    switch (type) {\n        case 'object':\n            return value !== null && typeof value === 'object' && !Array.isArray(value);\n        case 'array':\n            return Array.isArray(value);\n        case 'number':\n            return typeof value === 'number' && Number.isFinite(value);\n        case 'integer':\n            return typeof value === 'number' && Number.isInteger(value);\n        case 'string':\n        case 'boolean':\n            return typeof value === type;\n        default:\n            return true;\n    }\n}\nfunction validateSchema(value, schema, path) {\n    if (!schemaTypeMatches(value, schema.type)) {\n        return `${path} must be of type ${schema.type}`;\n    }\n    if (schema.enum && !schema.enum.some((candidate) => Object.is(candidate, value))) {\n        return `${path} must be one of: ${schema.enum.join(', ')}`;\n    }\n    if (typeof value === 'number') {\n        if (schema.minimum !== undefined && value < schema.minimum) {\n            return `${path} must be at least ${schema.minimum}`;\n        }\n        if (schema.maximum !== undefined && value > schema.maximum) {\n            return `${path} must be at most ${schema.maximum}`;\n        }\n    }\n    if (Array.isArray(value) && schema.items) {\n        for (let index = 0; index < value.length; index++) {\n            const error = validateSchema(value[index], schema.items, `${path}[${index}]`);\n            if (error)\n                return error;\n        }\n    }\n    if (value !== null && typeof value === 'object' && !Array.isArray(value)) {\n        const objectValue = value;\n        const properties = schema.properties || {};\n        for (const field of schema.required || []) {\n            if (!Object.prototype.hasOwnProperty.call(objectValue, field)) {\n                return `Missing required field: ${path === 'body' ? field : `${path}.${field}`}`;\n            }\n        }\n        if (schema.additionalProperties === false) {\n            for (const key of Object.keys(objectValue)) {\n                if (!Object.prototype.hasOwnProperty.call(properties, key)) {\n                    return `Unknown field: ${path === 'body' ? key : `${path}.${key}`}`;\n                }\n            }\n        }\n        for (const [key, propertySchema] of Object.entries(properties)) {\n            if (Object.prototype.hasOwnProperty.call(objectValue, key)) {\n                const error = validateSchema(objectValue[key], propertySchema, `${path}.${key}`);\n                if (error)\n                    return error;\n            }\n        }\n    }\n    return null;\n}\nfunction validateRequestBody(body, schemaName) {\n    const schema = contracts_1.CONTRACT_SCHEMAS[schemaName].request;\n    const error = validateSchema(body, schema, 'body');\n    if (error)\n        return error;\n    if (schemaName === 'reputation') {\n        const request = body;\n        if (request.operation === 'record' && !Object.prototype.hasOwnProperty.call(request, 'signal')) {\n            return 'Missing required field: signal';\n        }\n    }\n    return null;\n}\nasync function routeAgent(agentName, body) {\n    const start = performance.now();\n    let data;\n    switch (agentName) {\n        case 'index':\n            data = await (0, index_agent_1.handleIndex)(body);\n            break;\n        case 'reputation':\n            data = await (0, reputation_agent_1.handleReputation)(body);\n            break;\n        case 'bootstrap':\n            data = await (0, bootstrap_agent_1.handleBootstrap)(body);\n            break;\n        default:\n            throw new Error(`Unknown agent: ${agentName}`);\n    }\n    return {\n        data,\n        agent_layer: `REGISTRY_${agentName.toUpperCase()}`,\n        duration_ms: Math.round(performance.now() - start),\n    };\n}\nfunction handleHealth(req, res) {\n    const metadata = buildExecutionMetadata(req);\n    sendJson(res, 200, {\n        status: 'healthy',\n        agents: HEALTH_AGENTS,\n        execution_metadata: metadata,\n        layers_executed: [{ layer: 'AGENT_ROUTING', status: 'completed' }],\n    });\n}\nfunction handleContracts(req, res) {\n    const metadata = buildExecutionMetadata(req);\n    sendJson(res, 200, {\n        contracts: contracts_1.CONTRACT_SCHEMAS,\n        execution_metadata: metadata,\n        layers_executed: [{ layer: 'AGENT_ROUTING', status: 'completed' }],\n    });\n}\nasync function handleAgentRequest(agentName, req, res) {\n    const metadata = buildExecutionMetadata(req);\n    const layers = [{ layer: 'AGENT_ROUTING', status: 'completed' }];\n    if (req.method !== 'POST') {\n        sendJson(res, 405, {\n            error: 'Method not allowed. Use POST.',\n            execution_metadata: metadata,\n            layers_executed: layers,\n        });\n        return;\n    }\n    const validationError = validateRequestBody(req.body, agentName);\n    if (validationError) {\n        layers.push({ layer: `REGISTRY_${agentName.toUpperCase()}`, status: 'failed', duration_ms: 0 });\n        sendJson(res, 400, {\n            error: validationError,\n            execution_metadata: metadata,\n            layers_executed: layers,\n        });\n        return;\n    }\n    try {\n        const result = await routeAgent(agentName, req.body);\n        layers.push({\n            layer: result.agent_layer,\n            status: 'completed',\n            duration_ms: result.duration_ms,\n        });\n        sendJson(res, 200, {\n            data: result.data,\n            execution_metadata: metadata,\n            layers_executed: layers,\n        });\n    }\n    catch (err) {\n        console.error('Registry agent request failed', {\n            agent: agentName,\n            execution_id: metadata.execution_id,\n            error_name: err instanceof Error ? err.name : 'UnknownError',\n        });\n        layers.push({\n            layer: `REGISTRY_${agentName.toUpperCase()}`,\n            status: 'failed',\n            duration_ms: 0,\n        });\n        sendJson(res, 500, {\n            error: 'Internal agent error',\n            execution_metadata: metadata,\n            layers_executed: layers,\n        });\n    }\n}\nconst AGENT_ROUTES = {\n    '/v1/registry/index': 'index',\n    '/v1/registry/reputation': 'reputation',\n    '/v1/registry/bootstrap': 'bootstrap',\n};\nconst handler = async (req, res) => {\n    applyCors(res);\n    if (req.method === 'OPTIONS') {\n        res.writeHead(204);\n        res.end();\n        return;\n    }\n    const path = getRequestPath(req);\n    if (path === '/health' || path === '/') {\n        handleHealth(req, res);\n        return;\n    }\n    if (path === '/contracts') {\n        handleContracts(req, res);\n        return;\n    }\n    const agentName = AGENT_ROUTES[path];\n    if (agentName) {\n        await handleAgentRequest(agentName, req, res);\n        return;\n    }\n    const metadata = buildExecutionMetadata(req);\n    sendJson(res, 404, {\n        error: `Route not found: ${path}`,\n        available_routes: ['/health', '/contracts', ...Object.keys(AGENT_ROUTES)],\n        execution_metadata: metadata,\n        layers_executed: [{ layer: 'AGENT_ROUTING', status: 'failed' }],\n    });\n};\nexports.handler = handler;\n//# sourceMappingURL=index.js.map",
+                "sha256": "702b803f7b1b7dd36122da1f6b2c4811156dd1ace368562f41efb04d288bf74b"
+              },
+              {
+                "path": "functions/dist/index.js.map",
+                "parentBytes": "{\"version\":3,\"file\":\"index.js\",\"sourceRoot\":\"\",\"sources\":[\"../src/index.ts\"],\"names\":[],\"mappings\":\"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\"}",
+                "sha256": "74c8be4d7768650f6c6528faf9507369a569572eaf7de8b253a38f90f1c43094"
+              },
+              {
+                "path": "functions/dist/index.d.ts.map",
+                "parentBytes": "{\"version\":3,\"file\":\"index.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../src/index.ts\"],\"names\":[],\"mappings\":\"AACA,OAAO,KAAK,EAAE,eAAe,EAAE,cAAc,EAAE,MAAM,WAAW,CAAC;AAMjE,UAAU,OAAQ,SAAQ,eAAe;IACvC,IAAI,CAAC,EAAE,OAAO,CAAC;IACf,IAAI,CAAC,EAAE,MAAM,CAAC;IACd,MAAM,CAAC,EAAE,MAAM,CAAC;CACjB;AAED,UAAU,QAAS,SAAQ,cAAc;IACvC,MAAM,CAAC,CAAC,IAAI,EAAE,MAAM,GAAG,QAAQ,CAAC;IAChC,IAAI,CAAC,CAAC,IAAI,EAAE,OAAO,GAAG,IAAI,CAAC;IAC3B,IAAI,CAAC,CAAC,IAAI,EAAE,OAAO,GAAG,IAAI,CAAC;IAC3B,GAAG,CAAC,CAAC,MAAM,EAAE,MAAM,EAAE,KAAK,EAAE,MAAM,GAAG,IAAI,CAAC;CAC3C;AAgRD,eAAO,MAAM,OAAO,GAAU,KAAK,OAAO,EAAE,KAAK,QAAQ,KAAG,OAAO,CAAC,IAAI,CAkCvE,CAAC\"}",
+                "sha256": "59140a29569b49e4296dc8978278f92894c2a04b518094a06b0009da8edc6834"
+              },
+              {
+                "path": "functions/package.json",
+                "parentBytes": "{\n  \"name\": \"registry-agents\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Cloud Function entry point for Registry Agents (index, reputation, bootstrap)\",\n  \"main\": \"dist/index.js\",\n  \"scripts\": {\n    \"build\": \"tsc -p tsconfig.json\",\n    \"gcp-build\": \"\",\n    \"start\": \"npx functions-framework --target=handler --source=dist\",\n    \"test\": \"node dist/index.test.js && node dist/validation.test.js\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"engines\": {\n    \"node\": \">=20\"\n  },\n  \"dependencies\": {\n    \"@google-cloud/functions-framework\": \"^3.3.0\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"^20.11.0\",\n    \"typescript\": \"^5.3.3\"\n  }\n}\n",
+                "sha256": "7ea7c62a08c1a2ee8bdccb55b6d9dca5e9ed770555fafd159e9c7e8e40e83f77"
+              },
+              {
+                "path": ".github/workflows/registry-agents.yml",
+                "parentBytes": "name: Registry Agents Quality\n\non:\n  pull_request:\n    paths:\n      - 'functions/**'\n      - '.github/workflows/registry-agents.yml'\n  push:\n    branches: [main]\n    paths:\n      - 'functions/**'\n      - '.github/workflows/registry-agents.yml'\n\npermissions:\n  contents: read\n\nconcurrency:\n  group: registry-agents-${{ github.workflow }}-${{ github.ref }}\n  cancel-in-progress: true\n\njobs:\n  validate:\n    name: Build, test, typecheck, audit\n    runs-on: ubuntu-24.04\n    timeout-minutes: 10\n    defaults:\n      run:\n        working-directory: functions\n    steps:\n      - name: Check out repository\n        uses: actions/checkout@v4\n\n      - name: Set up Node.js\n        uses: actions/setup-node@v4\n        with:\n          node-version: '20'\n          cache: npm\n          cache-dependency-path: functions/package-lock.json\n\n      - name: Install locked dependencies\n        run: npm ci --ignore-scripts\n\n      - name: Build\n        run: npm run build\n\n      - name: Test\n        run: npm test\n\n      - name: Typecheck\n        run: npm run typecheck\n\n      - name: Audit production dependencies\n        run: npm audit --omit=dev --audit-level=high\n",
+                "sha256": "107da9dba8b013ec2eee2bb880c69eaa78f7ef8cb880e28e7b0aa579a8536e08"
+              }
+            ]
+          },
+          "primaryDelta": 0.8333333333333334,
+          "anchorScore": null,
+          "verdict": "REJECTED",
+          "failureReasons": [
+            "safety_regressed"
+          ],
+          "receipt": {
+            "payload": {
+              "kind": "candidate",
+              "id": "root__revision_gen1",
+              "target": "revision",
+              "verdict": "REJECTED",
+              "primaryDelta": 0.8333333333333334,
+              "baselineScore": {
+                "primary": 0.16666666666666666,
+                "itemWins": [
+                  false,
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "noopRate": 0,
+                "costPerWin": 0,
+                "regressed": true
+              },
+              "candidateScore": {
+                "primary": 1,
+                "itemWins": [
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true
+                ],
+                "noopRate": 0,
+                "costPerWin": 0,
+                "regressed": true
+              },
+              "anchorScore": null,
+              "failureReasons": [
+                "safety_regressed"
+              ],
+              "parents": [
+                "root"
+              ],
+              "generation": 1
+            },
+            "signature": "F7wtK842k8LaAJwaan/Mzbj9Wf+B0Ww72ssoHmFtgpiHbHVqwdPP4QpuQ+7BAFRzeusp9L29rhFd7dLGGSpSBg==",
+            "publicKey": "MCowBQYDK2VwAyEA91OTcMEeGQ1uQxMJTJLGaqIzQs0wPGj/uxL3CrSTRQY=",
+            "alg": "ed25519"
+          },
+          "createdAt": "gen-1",
+          "baselineScore": {
+            "primary": 0.16666666666666666,
+            "itemWins": [
+              false,
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "noopRate": 0,
+            "costPerWin": 0,
+            "regressed": true
+          },
+          "candidateScore": {
+            "primary": 1,
+            "itemWins": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ],
+            "noopRate": 0,
+            "costPerWin": 0,
+            "regressed": true
+          }
+        }
+      ],
+      "lift_curve": [
+        {
+          "generation": 0,
+          "primary": 0.16666666666666666,
+          "delta": 0,
+          "anchor": 1
+        }
+      ],
+      "gate_fingerprint": "c5942e7c9bf8f28fe7af47a6ec3887d11eeb3f8c8e8601cc6a7a54969ea0b981",
+      "verified_improvements": 0,
+      "anchor_surviving_improvements": 0,
+      "milestone_reached": false,
+      "created_at": "gen-1"
+    },
+    "generationsRun": 1,
+    "milestoneReached": false,
+    "finalPolicy": {
+      "revision": "489c613b148b8392d07e8c4f497c038d56a71b14"
+    }
+  },
+  "replay": {
+    "pass": true,
+    "checks": {
+      "receipts": true,
+      "reachesRoot": true,
+      "contiguousParents": true,
+      "allPromoted": true,
+      "gateUnchanged": true,
+      "gateReExecutes": true,
+      "allCommitsReceipts": true,
+      "sealedFieldsAuthentic": true
+    },
+    "failures": [],
+    "chainSummary": "gen0(root)"
+  },
+  "gate": "c5942e7c9bf8f28fe7af47a6ec3887d11eeb3f8c8e8601cc6a7a54969ea0b981",
+  "boundary": "regressed=true explicitly vetoes unavailable whole Rust/Ruflo gates and failed root locked install; not a new Node regression. cost/noop0 neutral/unmeasured. Adapter599 is test exception sentinel, not production response. Native fallback scope, not normalized Functions Framework req.path. Root-only replay is not candidate promotion."
+}

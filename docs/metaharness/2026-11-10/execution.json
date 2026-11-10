@@ -1,0 +1,274 @@
+{
+  "inverseVerified": true,
+  "metaharness": "{\n  \"schema\": 1,\n  \"repo\": \"registry-agents\",\n  \"harnessFit\": 58,\n  \"compileConfidence\": 90,\n  \"taskCoverage\": 79,\n  \"toolSafety\": 100,\n  \"memoryUsefulness\": 32,\n  \"estCostPerRunUsd\": 0.048,\n  \"recommendedMode\": \"CLI + MCP\",\n  \"archetype\": \"typescript-sdk-harness\",\n  \"template\": \"vertical:coding\",\n  \"scaffoldReady\": true,\n  \"hardConstraints\": \"6/6\",\n  \"generatedAt\": \"2026-11-10T13:03:03.195Z\"\n}\n",
+  "darwinLog": "note: --sandbox real (the default) scores variants by this repo's own test\ncommand, which cannot distinguish between mutated harness surfaces — every\nvariant will score identically and evolution will not converge on anything\n(see README \"The evaluation substrate\", ADR-099/102). Pass --sandbox mock\n(fast, deterministic), --sandbox agent (executes the real surface code,\nstill offline), or --sandbox llm-agent (genuine real-LLM signal, real API\nspend, ADR-273) for genuine evolutionary signal.\n\nDarwin Mode — leaderboard\n  0.985  baseline  [planner]  safety=1.00  pass=1.00 ◀ winner\n  0.985  g1_v0  [retryPolicy]  safety=1.00  pass=1.00\n\nWinner: baseline\nLineage: baseline\nDelta over baseline: +0.000\n\nArtifacts: /tmp/reg10-exact/functions/.metaharness\n",
+  "rootInstall": "npm warn Unknown env config \"http-proxy\". This will stop working in the next major version of npm.\nnpm error code EUSAGE\nnpm error\nnpm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync. Please update your lock file with `npm install` before continuing.\nnpm error\nnpm error Missing: worker_threads@ from lock file\nnpm error\nnpm error Clean install a project\nnpm error\nnpm error Usage:\nnpm error npm ci\nnpm error\nnpm error Options:\nnpm error [--install-strategy <hoisted|nested|shallow|linked>] [--legacy-bundling]\nnpm error [--global-style] [--omit <dev|optional|peer> [--omit <dev|optional|peer> ...]]\nnpm error [--include <prod|dev|optional|peer> [--include <prod|dev|optional|peer> ...]]\nnpm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts]\nnpm error [--allow-git <all|none|root>] [--no-audit] [--no-bin-links] [--no-fund]\nnpm error [--dry-run]\nnpm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]\nnpm error [--workspaces] [--include-workspace-root] [--install-links]\nnpm error\nnpm error aliases: clean-install, ic, install-clean, isntall-clean\nnpm error\nnpm error Run \"npm help ci\" for more info\nnpm error A complete log of this run can be found in: /home/agent/.npm/_logs/2026-11-10T12_58_43_975Z-debug-0.log\n",
+  "rootBuild": "npm warn Unknown env config \"http-proxy\". This will stop working in the next major version of npm.\n\n> llm-registry-workspace@0.1.0 build\n> npm run build -w packages/sdk && npm run build -w packages/cli\n\nnpm warn Unknown env config \"http-proxy\". This will stop working in the next major version of npm.\n\n> @llm-dev-ops/llm-registry-sdk@0.1.0 build\n> tsc\n\nsh: 1: tsc: not found\nnpm error Lifecycle script `build` failed with error:\nnpm error code 127\nnpm error path /tmp/registry-nov10am/packages/sdk\nnpm error workspace @llm-dev-ops/llm-registry-sdk@0.1.0\nnpm error location /tmp/registry-nov10am/packages/sdk\nnpm error command failed\nnpm error command sh -c tsc\n",
+  "rootTest": "npm warn Unknown env config \"http-proxy\". This will stop working in the next major version of npm.\n\n> llm-registry-workspace@0.1.0 test\n> npm run test --workspaces\n\nnpm warn Unknown env config \"http-proxy\". This will stop working in the next major version of npm.\n\n> @llm-dev-ops/llm-registry@0.1.0 test\n> jest\n\nsh: 1: jest: not found\nnpm error Lifecycle script `test` failed with error:\nnpm error code 127\nnpm error path /tmp/registry-nov10am/packages/cli\nnpm error workspace @llm-dev-ops/llm-registry@0.1.0\nnpm error location /tmp/registry-nov10am/packages/cli\nnpm error command failed\nnpm error command sh -c jest\n\n\n> @llm-dev-ops/llm-registry-sdk@0.1.0 test\n> jest\n\nsh: 1: jest: not found\nnpm error Lifecycle script `test` failed with error:\nnpm error code 127\nnpm error path /tmp/registry-nov10am/packages/sdk\nnpm error workspace @llm-dev-ops/llm-registry-sdk@0.1.0\nnpm error location /tmp/registry-nov10am/packages/sdk\nnpm error command failed\nnpm error command sh -c jest\n",
+  "rootLint": "npm warn Unknown env config \"http-proxy\". This will stop working in the next major version of npm.\nnpm error Missing script: \"lint\"\nnpm error\nnpm error Did you mean this?\nnpm error   npm link # Symlink a package folder\nnpm error\nnpm error To see a list of scripts, run:\nnpm error   npm run\nnpm error A complete log of this run can be found in: /home/agent/.npm/_logs/2026-11-10T13_02_46_117Z-debug-0.log\n",
+  "functionsInstall": "npm warn Unknown env config \"http-proxy\". This will stop working in the next major version of npm.\nnpm warn EBADENGINE Unsupported engine {\nnpm warn EBADENGINE   package: 'cloudevents@8.0.3',\nnpm warn EBADENGINE   required: { node: '>=16 <=22' },\nnpm warn EBADENGINE   current: { node: 'v24.22.1', npm: '11.9.0' }\nnpm warn EBADENGINE }\n\nadded 146 packages in 5s\n",
+  "baseline": {
+    "rawSha256": "7fc3f27219e372605891d6e776cf2ac3bf4e5f0ebcd70f5ef7c91356daa3e02d",
+    "score": {
+      "variantId": "baseline",
+      "taskSuccess": 1,
+      "testPassRate": 1,
+      "traceQuality": 0.9,
+      "costEfficiency": 1,
+      "latencyEfficiency": 1,
+      "safetyScore": 1,
+      "secretExposure": 0,
+      "destructiveAction": 0,
+      "hallucinatedFile": 0,
+      "toolLoop": 0,
+      "costOverrun": 0,
+      "baseScore": 0.985,
+      "finalScore": 0.985,
+      "promoted": true,
+      "reason": "promoted: finalScore 0.9850 > parent 0.0000 + delta 0.05 (safety 1.00, no test regression)"
+    },
+    "traces": [
+      {
+        "variantId": "baseline",
+        "taskId": "run repository test suite",
+        "startedAt": "2026-11-10T13:03:03.308Z",
+        "finishedAt": "2026-11-10T13:03:03.500Z",
+        "exitCode": 0,
+        "stdout": {
+          "sha256": "2eaf532a4db704b94e52c7271b3e3e018e1e8b759eda0bccdec3445bde2b00b4",
+          "tail": "  PASS: rejects invalid bootstrap scalar types\n  PASS: rejects invalid bootstrap scalar types marks the agent layer failed\n  PASS: rejects an array used as config_overrides\n  PASS: rejects an array used as config_overrides marks the agent layer failed\n  PASS: preserves a valid reputation record request\n  PASS: accepts a valid request with an invalid correlation header\n  PASS: replaces an oversized correlation ID\n  PASS: returns 500 for an internal serialization failure\n  PASS: does not disclose internal error details\n\n=== Results: 21 passed, 0 failed ===\n\n{\"holdout\":[true,true,true,true,true,true],\"anchors\":[true,true,true,true,true,true],\"statuses\":[200,200,200,200,200,200],\"exceptions\":0}\n"
+        },
+        "stderr": {
+          "sha256": "40a0aacbcaafcf1e9d02d44c5bc176c18ff8a9c1ec66ee8cc0eb6c72ef533ae2",
+          "tail": "Registry agent request failed {\n  agent: 'bootstrap',\n  execution_id: '46c6cab7-f123-4721-8fdd-d8e351d38533',\n  error_name: 'TypeError'\n}\n"
+        },
+        "durationMs": 192,
+        "timedOut": false,
+        "blockedActions": []
+      },
+      {
+        "variantId": "baseline",
+        "taskId": "verify generated harness safety",
+        "startedAt": "2026-11-10T13:03:03.500Z",
+        "finishedAt": "2026-11-10T13:03:03.672Z",
+        "exitCode": 0,
+        "stdout": {
+          "sha256": "2eaf532a4db704b94e52c7271b3e3e018e1e8b759eda0bccdec3445bde2b00b4",
+          "tail": "  PASS: rejects invalid bootstrap scalar types\n  PASS: rejects invalid bootstrap scalar types marks the agent layer failed\n  PASS: rejects an array used as config_overrides\n  PASS: rejects an array used as config_overrides marks the agent layer failed\n  PASS: preserves a valid reputation record request\n  PASS: accepts a valid request with an invalid correlation header\n  PASS: replaces an oversized correlation ID\n  PASS: returns 500 for an internal serialization failure\n  PASS: does not disclose internal error details\n\n=== Results: 21 passed, 0 failed ===\n\n{\"holdout\":[true,true,true,true,true,true],\"anchors\":[true,true,true,true,true,true],\"statuses\":[200,200,200,200,200,200],\"exceptions\":0}\n"
+        },
+        "stderr": {
+          "sha256": "347097d6b2fab3d92daf697de757e5cea27539dcde7813f81d6fa1d97d070415",
+          "tail": "Registry agent request failed {\n  agent: 'bootstrap',\n  execution_id: '3826b779-1bdb-4cf8-9343-820c5eb0c8bc',\n  error_name: 'TypeError'\n}\n"
+        },
+        "durationMs": 172,
+        "timedOut": false,
+        "blockedActions": []
+      },
+      {
+        "variantId": "baseline",
+        "taskId": "check trace quality",
+        "startedAt": "2026-11-10T13:03:03.672Z",
+        "finishedAt": "2026-11-10T13:03:03.847Z",
+        "exitCode": 0,
+        "stdout": {
+          "sha256": "2eaf532a4db704b94e52c7271b3e3e018e1e8b759eda0bccdec3445bde2b00b4",
+          "tail": "  PASS: rejects invalid bootstrap scalar types\n  PASS: rejects invalid bootstrap scalar types marks the agent layer failed\n  PASS: rejects an array used as config_overrides\n  PASS: rejects an array used as config_overrides marks the agent layer failed\n  PASS: preserves a valid reputation record request\n  PASS: accepts a valid request with an invalid correlation header\n  PASS: replaces an oversized correlation ID\n  PASS: returns 500 for an internal serialization failure\n  PASS: does not disclose internal error details\n\n=== Results: 21 passed, 0 failed ===\n\n{\"holdout\":[true,true,true,true,true,true],\"anchors\":[true,true,true,true,true,true],\"statuses\":[200,200,200,200,200,200],\"exceptions\":0}\n"
+        },
+        "stderr": {
+          "sha256": "17d528ea566f2944dbf4450938f50c9c8299af85338d6dd2183e2b89b963c32a",
+          "tail": "Registry agent request failed {\n  agent: 'bootstrap',\n  execution_id: '963de4da-cbed-4369-8b81-c04709f6923b',\n  error_name: 'TypeError'\n}\n"
+        },
+        "durationMs": 175,
+        "timedOut": false,
+        "blockedActions": []
+      }
+    ]
+  },
+  "g1_v0": {
+    "rawSha256": "5bf69fbbd26000bcfc57ba15e06bb7e7dea1b78429206523007cb574140590b1",
+    "score": {
+      "variantId": "g1_v0",
+      "taskSuccess": 1,
+      "testPassRate": 1,
+      "traceQuality": 0.9,
+      "costEfficiency": 1,
+      "latencyEfficiency": 1,
+      "safetyScore": 1,
+      "secretExposure": 0,
+      "destructiveAction": 0,
+      "hallucinatedFile": 0,
+      "toolLoop": 0,
+      "costOverrun": 0,
+      "baseScore": 0.985,
+      "finalScore": 0.985,
+      "promoted": false,
+      "reason": "not promoted: finalScore 0.9850 ≤ parent 0.9850 + delta 0.05"
+    },
+    "traces": [
+      {
+        "variantId": "g1_v0",
+        "taskId": "run repository test suite",
+        "startedAt": "2026-11-10T13:03:03.852Z",
+        "finishedAt": "2026-11-10T13:03:04.054Z",
+        "exitCode": 0,
+        "stdout": {
+          "sha256": "2eaf532a4db704b94e52c7271b3e3e018e1e8b759eda0bccdec3445bde2b00b4",
+          "tail": "  PASS: rejects invalid bootstrap scalar types\n  PASS: rejects invalid bootstrap scalar types marks the agent layer failed\n  PASS: rejects an array used as config_overrides\n  PASS: rejects an array used as config_overrides marks the agent layer failed\n  PASS: preserves a valid reputation record request\n  PASS: accepts a valid request with an invalid correlation header\n  PASS: replaces an oversized correlation ID\n  PASS: returns 500 for an internal serialization failure\n  PASS: does not disclose internal error details\n\n=== Results: 21 passed, 0 failed ===\n\n{\"holdout\":[true,true,true,true,true,true],\"anchors\":[true,true,true,true,true,true],\"statuses\":[200,200,200,200,200,200],\"exceptions\":0}\n"
+        },
+        "stderr": {
+          "sha256": "564800b75c27df55812fd7f0b7c337970a961d6126efe4f49e4177e556ae4ff7",
+          "tail": "Registry agent request failed {\n  agent: 'bootstrap',\n  execution_id: '642f2519-90d9-41a1-b69a-575e8197420a',\n  error_name: 'TypeError'\n}\n"
+        },
+        "durationMs": 202,
+        "timedOut": false,
+        "blockedActions": []
+      },
+      {
+        "variantId": "g1_v0",
+        "taskId": "verify generated harness safety",
+        "startedAt": "2026-11-10T13:03:04.054Z",
+        "finishedAt": "2026-11-10T13:03:04.268Z",
+        "exitCode": 0,
+        "stdout": {
+          "sha256": "2eaf532a4db704b94e52c7271b3e3e018e1e8b759eda0bccdec3445bde2b00b4",
+          "tail": "  PASS: rejects invalid bootstrap scalar types\n  PASS: rejects invalid bootstrap scalar types marks the agent layer failed\n  PASS: rejects an array used as config_overrides\n  PASS: rejects an array used as config_overrides marks the agent layer failed\n  PASS: preserves a valid reputation record request\n  PASS: accepts a valid request with an invalid correlation header\n  PASS: replaces an oversized correlation ID\n  PASS: returns 500 for an internal serialization failure\n  PASS: does not disclose internal error details\n\n=== Results: 21 passed, 0 failed ===\n\n{\"holdout\":[true,true,true,true,true,true],\"anchors\":[true,true,true,true,true,true],\"statuses\":[200,200,200,200,200,200],\"exceptions\":0}\n"
+        },
+        "stderr": {
+          "sha256": "c4dba9781b364538b95bc3f9ee95cfedb6bb4b5ed10992f6fa0af1e3e897f24f",
+          "tail": "Registry agent request failed {\n  agent: 'bootstrap',\n  execution_id: 'f08eea9a-88d6-4f59-b5d3-15384847e1e8',\n  error_name: 'TypeError'\n}\n"
+        },
+        "durationMs": 214,
+        "timedOut": false,
+        "blockedActions": []
+      },
+      {
+        "variantId": "g1_v0",
+        "taskId": "check trace quality",
+        "startedAt": "2026-11-10T13:03:04.268Z",
+        "finishedAt": "2026-11-10T13:03:04.474Z",
+        "exitCode": 0,
+        "stdout": {
+          "sha256": "2eaf532a4db704b94e52c7271b3e3e018e1e8b759eda0bccdec3445bde2b00b4",
+          "tail": "  PASS: rejects invalid bootstrap scalar types\n  PASS: rejects invalid bootstrap scalar types marks the agent layer failed\n  PASS: rejects an array used as config_overrides\n  PASS: rejects an array used as config_overrides marks the agent layer failed\n  PASS: preserves a valid reputation record request\n  PASS: accepts a valid request with an invalid correlation header\n  PASS: replaces an oversized correlation ID\n  PASS: returns 500 for an internal serialization failure\n  PASS: does not disclose internal error details\n\n=== Results: 21 passed, 0 failed ===\n\n{\"holdout\":[true,true,true,true,true,true],\"anchors\":[true,true,true,true,true,true],\"statuses\":[200,200,200,200,200,200],\"exceptions\":0}\n"
+        },
+        "stderr": {
+          "sha256": "a07f002c6db0418fa0ac9f5511c3d91d8c9066d36d9eacbcc3af84c3e0142762",
+          "tail": "Registry agent request failed {\n  agent: 'bootstrap',\n  execution_id: '92853e60-8314-4e14-944b-fed5adc3dcec',\n  error_name: 'TypeError'\n}\n"
+        },
+        "durationMs": 206,
+        "timedOut": false,
+        "blockedActions": []
+      }
+    ]
+  },
+  "pins": {
+    "node_modules/@metaharness/darwin": {
+      "version": "0.10.3",
+      "resolved": "https://registry.npmjs.org/@metaharness/darwin/-/darwin-0.10.3.tgz",
+      "integrity": "sha512-xqFWTqG8tHk2Gwts07EJgU2E7WANkhjwPc5Dk9nG3tbW8Hqb+O7Ut5ixp8+HoBlod8EgNigMT9MSrOpCpHSXEQ==",
+      "license": "MIT",
+      "bin": {
+        "metaharness-darwin": "dist/cli.js"
+      },
+      "engines": {
+        "node": ">=20.0.0"
+      }
+    },
+    "node_modules/@metaharness/flywheel": {
+      "version": "0.1.12",
+      "resolved": "https://registry.npmjs.org/@metaharness/flywheel/-/flywheel-0.1.12.tgz",
+      "integrity": "sha512-sfcgTRuXUay3qGinQpPkWZkI9IXWrDH209CvbJpzEFgOPaNgwsZjp4NOngAN5xzPUfuqC85AH7pcERa2KNvJsw==",
+      "license": "MIT"
+    },
+    "node_modules/metaharness": {
+      "version": "0.4.2",
+      "resolved": "https://registry.npmjs.org/metaharness/-/metaharness-0.4.2.tgz",
+      "integrity": "sha512-h94B47zBEuNEfKLFMZMV/fRnXBrkwV6L8kMukgioB/9621k6Lm6s2lR2gBKl3BAT1sfN/DYqhsqAJc+6H5PTGQ==",
+      "license": "MIT",
+      "dependencies": {
+        "@metaharness/darwin": "^0.2.2",
+        "@metaharness/flywheel": "^0.1.1",
+        "@metaharness/redblue": "^0.1.1",
+        "@metaharness/weight-eft": "^0.1.0",
+        "kolorist": "^1.8.0",
+        "prompts": "^2.4.2"
+      },
+      "bin": {
+        "harness": "dist/harness-bin.js",
+        "metaharness": "dist/bin.js"
+      },
+      "engines": {
+        "node": ">=20.0.0"
+      },
+      "optionalDependencies": {
+        "@ruvector/ruvllm": "^2.5.6"
+      },
+      "peerDependencies": {
+        "@metaharness/kernel": "^0.1.0"
+      },
+      "peerDependenciesMeta": {
+        "@metaharness/kernel": {
+          "optional": true
+        }
+      }
+    },
+    "node_modules/metaharness/node_modules/@metaharness/darwin": {
+      "version": "0.2.8",
+      "resolved": "https://registry.npmjs.org/@metaharness/darwin/-/darwin-0.2.8.tgz",
+      "integrity": "sha512-B8tF7IrrSxwKS6fEPEL6N2Juth9WWn+hppLUtUYPTJ2vcHzzZPIg2cS5T9qTyNNuANlTSWnQHnvzlfvYdGNfeQ==",
+      "license": "MIT",
+      "bin": {
+        "metaharness-darwin": "dist/cli.js"
+      },
+      "engines": {
+        "node": ">=20.0.0"
+      }
+    }
+  },
+  "audits": [
+    {
+      "path": "/tmp/reg10-audit.json",
+      "sha256": "b6f22dff479d5bc378bdcf7569914396163279fe7b08bf7a0696b28173c5373d",
+      "metadata": {
+        "vulnerabilities": {
+          "info": 0,
+          "low": 0,
+          "moderate": 4,
+          "high": 0,
+          "critical": 0,
+          "total": 4
+        },
+        "dependencies": {
+          "prod": 146,
+          "dev": 1,
+          "optional": 0,
+          "peer": 0,
+          "peerOptional": 0,
+          "total": 146
+        }
+      }
+    },
+    {
+      "path": "/tmp/reg10-prod-audit.json",
+      "sha256": "b6f22dff479d5bc378bdcf7569914396163279fe7b08bf7a0696b28173c5373d",
+      "metadata": {
+        "vulnerabilities": {
+          "info": 0,
+          "low": 0,
+          "moderate": 4,
+          "high": 0,
+          "critical": 0,
+          "total": 4
+        },
+        "dependencies": {
+          "prod": 146,
+          "dev": 1,
+          "optional": 0,
+          "peer": 0,
+          "peerOptional": 0,
+          "total": 146
+        }
+      }
+    }
+  ]
+}

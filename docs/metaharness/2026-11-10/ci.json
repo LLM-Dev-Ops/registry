@@ -1,0 +1,631 @@
+{
+  "runs": [
+    {
+      "id": 42820851435,
+      "name": "Registry Agents Quality",
+      "head": "1573536784aac073faa057fb876ba4996a32fea0",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 42820851414,
+      "name": "Rust Quality",
+      "head": "1573536784aac073faa057fb876ba4996a32fea0",
+      "status": "in_progress",
+      "conclusion": null
+    }
+  ],
+  "finalRustJobs": {
+    "total_count": 5,
+    "jobs": [
+      {
+        "id": 129845705525,
+        "run_id": 42820851414,
+        "workflow_name": "Rust Quality",
+        "head_branch": "metaharness/registry-determinism-20261028",
+        "run_url": "https://api.github.com/repos/LLM-Dev-Ops/registry/actions/runs/42820851414",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOQXqKj88AAAAeO2g7NQ",
+        "head_sha": "1573536784aac073faa057fb876ba4996a32fea0",
+        "url": "https://api.github.com/repos/LLM-Dev-Ops/registry/actions/jobs/129845705525",
+        "html_url": "https://github.com/LLM-Dev-Ops/registry/actions/runs/42820851414/job/129845705525",
+        "status": "completed",
+        "conclusion": "failure",
+        "created_at": "2026-11-10T13:02:09Z",
+        "started_at": "2026-11-10T13:02:11Z",
+        "completed_at": "2026-11-10T13:03:46Z",
+        "name": "quality (cargo test --locked --workspace)",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-11-10T13:02:12Z",
+            "completed_at": "2026-11-10T13:02:12Z"
+          },
+          {
+            "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-11-10T13:02:12Z",
+            "completed_at": "2026-11-10T13:02:13Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-11-10T13:02:13Z",
+            "completed_at": "2026-11-10T13:02:20Z"
+          },
+          {
+            "name": "Run sudo apt-get update && sudo apt-get install --no-install-recommends -y pkg-config libssl-dev protobuf-compiler",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-11-10T13:02:20Z",
+            "completed_at": "2026-11-10T13:02:28Z"
+          },
+          {
+            "name": "Run sha256sum Cargo.lock > \"$RUNNER_TEMP/registry-lock.sha256\"",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-11-10T13:02:28Z",
+            "completed_at": "2026-11-10T13:02:28Z"
+          },
+          {
+            "name": "Run cargo test --locked --workspace",
+            "status": "completed",
+            "conclusion": "failure",
+            "number": 6,
+            "started_at": "2026-11-10T13:02:28Z",
+            "completed_at": "2026-11-10T13:03:44Z"
+          },
+          {
+            "name": "Run sha256sum --check \"$RUNNER_TEMP/registry-lock.sha256\" && git diff --exit-code -- Cargo.lock",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-11-10T13:03:44Z",
+            "completed_at": "2026-11-10T13:03:44Z"
+          },
+          {
+            "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14,
+            "started_at": "2026-11-10T13:03:44Z",
+            "completed_at": "2026-11-10T13:03:44Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15,
+            "started_at": "2026-11-10T13:03:44Z",
+            "completed_at": "2026-11-10T13:03:44Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/LLM-Dev-Ops/registry/check-runs/129845705525",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "runner_id": 1000037000,
+        "runner_name": "GitHub Actions 1000037000",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 129845705909,
+        "run_id": 42820851414,
+        "workflow_name": "Rust Quality",
+        "head_branch": "metaharness/registry-determinism-20261028",
+        "run_url": "https://api.github.com/repos/LLM-Dev-Ops/registry/actions/runs/42820851414",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOQXqKj88AAAAeO2g8tQ",
+        "head_sha": "1573536784aac073faa057fb876ba4996a32fea0",
+        "url": "https://api.github.com/repos/LLM-Dev-Ops/registry/actions/jobs/129845705909",
+        "html_url": "https://github.com/LLM-Dev-Ops/registry/actions/runs/42820851414/job/129845705909",
+        "status": "completed",
+        "conclusion": "failure",
+        "created_at": "2026-11-10T13:02:09Z",
+        "started_at": "2026-11-10T13:02:11Z",
+        "completed_at": "2026-11-10T13:03:02Z",
+        "name": "quality (cargo fmt --all -- --check)",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-11-10T13:02:12Z",
+            "completed_at": "2026-11-10T13:02:12Z"
+          },
+          {
+            "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-11-10T13:02:12Z",
+            "completed_at": "2026-11-10T13:02:13Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-11-10T13:02:13Z",
+            "completed_at": "2026-11-10T13:02:23Z"
+          },
+          {
+            "name": "Run sudo apt-get update && sudo apt-get install --no-install-recommends -y pkg-config libssl-dev protobuf-compiler",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-11-10T13:02:23Z",
+            "completed_at": "2026-11-10T13:03:00Z"
+          },
+          {
+            "name": "Run sha256sum Cargo.lock > \"$RUNNER_TEMP/registry-lock.sha256\"",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-11-10T13:03:00Z",
+            "completed_at": "2026-11-10T13:03:00Z"
+          },
+          {
+            "name": "Run cargo fmt --all -- --check",
+            "status": "completed",
+            "conclusion": "failure",
+            "number": 6,
+            "started_at": "2026-11-10T13:03:00Z",
+            "completed_at": "2026-11-10T13:03:00Z"
+          },
+          {
+            "name": "Run sha256sum --check \"$RUNNER_TEMP/registry-lock.sha256\" && git diff --exit-code -- Cargo.lock",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-11-10T13:03:00Z",
+            "completed_at": "2026-11-10T13:03:00Z"
+          },
+          {
+            "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14,
+            "started_at": "2026-11-10T13:03:00Z",
+            "completed_at": "2026-11-10T13:03:00Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15,
+            "started_at": "2026-11-10T13:03:00Z",
+            "completed_at": "2026-11-10T13:03:00Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/LLM-Dev-Ops/registry/check-runs/129845705909",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "runner_id": 1000037004,
+        "runner_name": "GitHub Actions 1000037004",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 129845705922,
+        "run_id": 42820851414,
+        "workflow_name": "Rust Quality",
+        "head_branch": "metaharness/registry-determinism-20261028",
+        "run_url": "https://api.github.com/repos/LLM-Dev-Ops/registry/actions/runs/42820851414",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOQXqKj88AAAAeO2g8wg",
+        "head_sha": "1573536784aac073faa057fb876ba4996a32fea0",
+        "url": "https://api.github.com/repos/LLM-Dev-Ops/registry/actions/jobs/129845705922",
+        "html_url": "https://github.com/LLM-Dev-Ops/registry/actions/runs/42820851414/job/129845705922",
+        "status": "completed",
+        "conclusion": "failure",
+        "created_at": "2026-11-10T13:02:09Z",
+        "started_at": "2026-11-10T13:02:11Z",
+        "completed_at": "2026-11-10T13:03:27Z",
+        "name": "quality (cargo clippy --locked --workspace --all-targets -- -D warnings)",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-11-10T13:02:12Z",
+            "completed_at": "2026-11-10T13:02:12Z"
+          },
+          {
+            "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-11-10T13:02:12Z",
+            "completed_at": "2026-11-10T13:02:14Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-11-10T13:02:14Z",
+            "completed_at": "2026-11-10T13:02:22Z"
+          },
+          {
+            "name": "Run sudo apt-get update && sudo apt-get install --no-install-recommends -y pkg-config libssl-dev protobuf-compiler",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-11-10T13:02:22Z",
+            "completed_at": "2026-11-10T13:02:30Z"
+          },
+          {
+            "name": "Run sha256sum Cargo.lock > \"$RUNNER_TEMP/registry-lock.sha256\"",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-11-10T13:02:30Z",
+            "completed_at": "2026-11-10T13:02:30Z"
+          },
+          {
+            "name": "Run cargo clippy --locked --workspace --all-targets -- -D warnings",
+            "status": "completed",
+            "conclusion": "failure",
+            "number": 6,
+            "started_at": "2026-11-10T13:02:30Z",
+            "completed_at": "2026-11-10T13:03:25Z"
+          },
+          {
+            "name": "Run sha256sum --check \"$RUNNER_TEMP/registry-lock.sha256\" && git diff --exit-code -- Cargo.lock",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-11-10T13:03:25Z",
+            "completed_at": "2026-11-10T13:03:25Z"
+          },
+          {
+            "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14,
+            "started_at": "2026-11-10T13:03:25Z",
+            "completed_at": "2026-11-10T13:03:25Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15,
+            "started_at": "2026-11-10T13:03:25Z",
+            "completed_at": "2026-11-10T13:03:25Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/LLM-Dev-Ops/registry/check-runs/129845705922",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "runner_id": 1000037002,
+        "runner_name": "GitHub Actions 1000037002",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 129845705954,
+        "run_id": 42820851414,
+        "workflow_name": "Rust Quality",
+        "head_branch": "metaharness/registry-determinism-20261028",
+        "run_url": "https://api.github.com/repos/LLM-Dev-Ops/registry/actions/runs/42820851414",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOQXqKj88AAAAeO2g84g",
+        "head_sha": "1573536784aac073faa057fb876ba4996a32fea0",
+        "url": "https://api.github.com/repos/LLM-Dev-Ops/registry/actions/jobs/129845705954",
+        "html_url": "https://github.com/LLM-Dev-Ops/registry/actions/runs/42820851414/job/129845705954",
+        "status": "completed",
+        "conclusion": "failure",
+        "created_at": "2026-11-10T13:02:09Z",
+        "started_at": "2026-11-10T13:02:11Z",
+        "completed_at": "2026-11-10T13:04:26Z",
+        "name": "quality (cargo build --locked --workspace)",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-11-10T13:02:12Z",
+            "completed_at": "2026-11-10T13:02:13Z"
+          },
+          {
+            "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-11-10T13:02:13Z",
+            "completed_at": "2026-11-10T13:02:15Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-11-10T13:02:15Z",
+            "completed_at": "2026-11-10T13:02:24Z"
+          },
+          {
+            "name": "Run sudo apt-get update && sudo apt-get install --no-install-recommends -y pkg-config libssl-dev protobuf-compiler",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-11-10T13:02:24Z",
+            "completed_at": "2026-11-10T13:02:33Z"
+          },
+          {
+            "name": "Run sha256sum Cargo.lock > \"$RUNNER_TEMP/registry-lock.sha256\"",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-11-10T13:02:33Z",
+            "completed_at": "2026-11-10T13:02:33Z"
+          },
+          {
+            "name": "Run cargo build --locked --workspace",
+            "status": "completed",
+            "conclusion": "failure",
+            "number": 6,
+            "started_at": "2026-11-10T13:02:33Z",
+            "completed_at": "2026-11-10T13:04:23Z"
+          },
+          {
+            "name": "Run sha256sum --check \"$RUNNER_TEMP/registry-lock.sha256\" && git diff --exit-code -- Cargo.lock",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-11-10T13:04:23Z",
+            "completed_at": "2026-11-10T13:04:23Z"
+          },
+          {
+            "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14,
+            "started_at": "2026-11-10T13:04:23Z",
+            "completed_at": "2026-11-10T13:04:23Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15,
+            "started_at": "2026-11-10T13:04:23Z",
+            "completed_at": "2026-11-10T13:04:23Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/LLM-Dev-Ops/registry/check-runs/129845705954",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "runner_id": 1000037001,
+        "runner_name": "GitHub Actions 1000037001",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 129845706034,
+        "run_id": 42820851414,
+        "workflow_name": "Rust Quality",
+        "head_branch": "metaharness/registry-determinism-20261028",
+        "run_url": "https://api.github.com/repos/LLM-Dev-Ops/registry/actions/runs/42820851414",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOQXqKj88AAAAeO2g9Mg",
+        "head_sha": "1573536784aac073faa057fb876ba4996a32fea0",
+        "url": "https://api.github.com/repos/LLM-Dev-Ops/registry/actions/jobs/129845706034",
+        "html_url": "https://github.com/LLM-Dev-Ops/registry/actions/runs/42820851414/job/129845706034",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-11-10T13:02:09Z",
+        "started_at": "2026-11-10T13:02:12Z",
+        "completed_at": "2026-11-10T13:02:50Z",
+        "name": "quality (cargo test --locked -p llm-registry-core --lib)",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-11-10T13:02:13Z",
+            "completed_at": "2026-11-10T13:02:14Z"
+          },
+          {
+            "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-11-10T13:02:14Z",
+            "completed_at": "2026-11-10T13:02:15Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-11-10T13:02:15Z",
+            "completed_at": "2026-11-10T13:02:25Z"
+          },
+          {
+            "name": "Run sudo apt-get update && sudo apt-get install --no-install-recommends -y pkg-config libssl-dev protobuf-compiler",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-11-10T13:02:25Z",
+            "completed_at": "2026-11-10T13:02:34Z"
+          },
+          {
+            "name": "Run sha256sum Cargo.lock > \"$RUNNER_TEMP/registry-lock.sha256\"",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-11-10T13:02:34Z",
+            "completed_at": "2026-11-10T13:02:34Z"
+          },
+          {
+            "name": "Run cargo test --locked -p llm-registry-core --lib",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-11-10T13:02:34Z",
+            "completed_at": "2026-11-10T13:02:47Z"
+          },
+          {
+            "name": "Run sha256sum --check \"$RUNNER_TEMP/registry-lock.sha256\" && git diff --exit-code -- Cargo.lock",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-11-10T13:02:47Z",
+            "completed_at": "2026-11-10T13:02:47Z"
+          },
+          {
+            "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14,
+            "started_at": "2026-11-10T13:02:47Z",
+            "completed_at": "2026-11-10T13:02:47Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15,
+            "started_at": "2026-11-10T13:02:47Z",
+            "completed_at": "2026-11-10T13:02:47Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/LLM-Dev-Ops/registry/check-runs/129845706034",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "runner_id": 1000037003,
+        "runner_name": "GitHub Actions 1000037003",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      }
+    ]
+  },
+  "diagnostics": {
+    "129845706034": [
+      "2026-11-10T13:02:47.4557707Z test result: ok. 92 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+    ],
+    "129845705909": [
+      "2026-11-10T13:03:00.2378645Z Diff in /home/runner/work/registry/registry/crates/llm-registry-service/src/validation.rs:526:",
+      "2026-11-10T13:03:00.2381913Z Diff in /home/runner/work/registry/registry/crates/llm-registry-service/src/validation.rs:541:",
+      "2026-11-10T13:03:00.2386629Z Diff in /home/runner/work/registry/registry/crates/llm-registry-service/src/validation.rs:563:",
+      "2026-11-10T13:03:00.2394681Z Diff in /home/runner/work/registry/registry/crates/llm-registry-service/src/versioning.rs:21:",
+      "2026-11-10T13:03:00.2399468Z Diff in /home/runner/work/registry/registry/crates/llm-registry-service/src/versioning.rs:33:",
+      "2026-11-10T13:03:00.2402871Z Diff in /home/runner/work/registry/registry/crates/llm-registry-service/src/versioning.rs:40:",
+      "2026-11-10T13:03:00.2405546Z Diff in /home/runner/work/registry/registry/crates/llm-registry-service/src/versioning.rs:97:",
+      "2026-11-10T13:03:00.2408356Z Diff in /home/runner/work/registry/registry/crates/llm-registry-service/src/versioning.rs:112:",
+      "2026-11-10T13:03:00.2410028Z Diff in /home/runner/work/registry/registry/crates/llm-registry-service/src/versioning.rs:127:",
+      "2026-11-10T13:03:00.2412523Z Diff in /home/runner/work/registry/registry/crates/llm-registry-service/src/versioning.rs:180:",
+      "2026-11-10T13:03:00.2414107Z Diff in /home/runner/work/registry/registry/crates/llm-registry-service/src/versioning.rs:224:",
+      "2026-11-10T13:03:00.2415953Z Diff in /home/runner/work/registry/registry/crates/llm-registry-service/src/versioning.rs:244:",
+      "2026-11-10T13:03:00.2417635Z Diff in /home/runner/work/registry/registry/crates/llm-registry-service/src/versioning.rs:257:",
+      "2026-11-10T13:03:00.2420252Z Diff in /home/runner/work/registry/registry/crates/llm-registry-service/src/versioning.rs:286:",
+      "2026-11-10T13:03:00.2422091Z Diff in /home/runner/work/registry/registry/crates/llm-registry-service/src/versioning.rs:348:",
+      "2026-11-10T13:03:00.2424031Z Diff in /home/runner/work/registry/registry/crates/llm-registry-service/src/versioning.rs:357:",
+      "2026-11-10T13:03:00.2426186Z Diff in /home/runner/work/registry/registry/tests/api_tests.rs:127:",
+      "2026-11-10T13:03:00.2432243Z Diff in /home/runner/work/registry/registry/tests/common/mod.rs:39:",
+      "2026-11-10T13:03:00.2434123Z Diff in /home/runner/work/registry/registry/tests/common/mod.rs:90:",
+      "2026-11-10T13:03:00.2436084Z Diff in /home/runner/work/registry/registry/tests/common/mod.rs:138:",
+      "2026-11-10T13:03:00.2462999Z Diff in /home/runner/work/registry/registry/tests/auth_tests.rs:4:",
+      "2026-11-10T13:03:00.2464622Z Diff in /home/runner/work/registry/registry/tests/auth_tests.rs:131:",
+      "2026-11-10T13:03:00.2466361Z Diff in /home/runner/work/registry/registry/tests/auth_tests.rs:225:",
+      "2026-11-10T13:03:00.2476666Z Diff in /home/runner/work/registry/registry/tests/common/mod.rs:39:",
+      "2026-11-10T13:03:00.2478604Z Diff in /home/runner/work/registry/registry/tests/common/mod.rs:90:",
+      "2026-11-10T13:03:00.2480245Z Diff in /home/runner/work/registry/registry/tests/common/mod.rs:138:",
+      "2026-11-10T13:03:00.2497843Z Diff in /home/runner/work/registry/registry/tests/common/mod.rs:39:",
+      "2026-11-10T13:03:00.2499621Z Diff in /home/runner/work/registry/registry/tests/common/mod.rs:90:",
+      "2026-11-10T13:03:00.2501300Z Diff in /home/runner/work/registry/registry/tests/common/mod.rs:138:",
+      "2026-11-10T13:03:00.2505067Z Diff in /home/runner/work/registry/registry/tests/rate_limit_tests.rs:22:",
+      "2026-11-10T13:03:00.2507412Z Diff in /home/runner/work/registry/registry/tests/rate_limit_tests.rs:41:",
+      "2026-11-10T13:03:00.2525404Z Diff in /home/runner/work/registry/registry/tests/common/mod.rs:39:",
+      "2026-11-10T13:03:00.2527708Z Diff in /home/runner/work/registry/registry/tests/common/mod.rs:90:",
+      "2026-11-10T13:03:00.2529564Z Diff in /home/runner/work/registry/registry/tests/common/mod.rs:138:",
+      "2026-11-10T13:03:00.2563038Z ##[error]Process completed with exit code 1."
+    ],
+    "129845705922": [
+      "2026-11-10T13:03:24.3147422Z \u001b[1m\u001b[91merror\u001b[0m: could not compile `llm-registry-core` (lib) due to 5 previous errors",
+      "2026-11-10T13:03:25.3175023Z ##[error]Process completed with exit code 101."
+    ],
+    "129845705525": [
+      "2026-11-10T13:03:02.0042568Z \u001b[1m\u001b[92m   Compiling\u001b[0m thiserror v2.0.17",
+      "2026-11-10T13:03:07.8002473Z \u001b[1m\u001b[92m   Compiling\u001b[0m thiserror-impl v2.0.17",
+      "2026-11-10T13:03:23.4002881Z \u001b[1m\u001b[92m   Compiling\u001b[0m serde_path_to_error v0.1.20",
+      "2026-11-10T13:03:43.3272156Z \u001b[1m\u001b[91merror\u001b[0m\u001b[1m: environment variable `TARGET` not defined at compile time\u001b[0m",
+      "2026-11-10T13:03:43.3351323Z \u001b[1m\u001b[94m236\u001b[0m \u001b[1m\u001b[94m|\u001b[0m             target_triple: Some(env!(\"TARGET\").to_string()),",
+      "2026-11-10T13:03:43.3451244Z     \u001b[1m\u001b[94m= \u001b[0m\u001b[1mhelp\u001b[0m: `TARGET` may not be available for the current Cargo target",
+      "2026-11-10T13:03:43.3478241Z     \u001b[1m\u001b[94m= \u001b[0m\u001b[1mhelp\u001b[0m: Cargo sets build script variables at run time. Use `std::env::var(\"TARGET\")` instead",
+      "2026-11-10T13:03:43.3531260Z \u001b[1m\u001b[33mwarning\u001b[0m\u001b[1m: unused import: `BenchmarkComparison`\u001b[0m",
+      "2026-11-10T13:03:43.3621628Z \u001b[1m\u001b[94m7\u001b[0m \u001b[1m\u001b[94m|\u001b[0m use crate::io::{ComparisonSummary, BenchmarkComparison};",
+      "2026-11-10T13:03:43.4412161Z \u001b[1m\u001b[91merror[E0599]\u001b[0m\u001b[1m: the method `clone` exists for struct `Vec<BenchmarkComparison>`, but its trait bounds were not satisfied\u001b[0m",
+      "2026-11-10T13:03:43.4511873Z     \u001b[1m\u001b[94m|\u001b[0m                                                      \u001b[1m\u001b[91m^^^^^\u001b[0m \u001b[1m\u001b[91mmethod cannot be called on `Vec<BenchmarkComparison>` due to unsatisfied trait bounds\u001b[0m",
+      "2026-11-10T13:03:43.4661213Z \u001b[1m\u001b[94m214\u001b[0m \u001b[1m\u001b[94m|\u001b[0m pub struct BenchmarkComparison {",
+      "2026-11-10T13:03:43.4681067Z     \u001b[1m\u001b[94m|\u001b[0m \u001b[1m\u001b[94m------------------------------\u001b[0m \u001b[1m\u001b[94mdoesn't satisfy `BenchmarkComparison: Clone`\u001b[0m",
+      "2026-11-10T13:03:43.4741228Z             `BenchmarkComparison: Clone`",
+      "2026-11-10T13:03:43.4751094Z             which is required by `Vec<BenchmarkComparison>: Clone`",
+      "2026-11-10T13:03:43.4781296Z \u001b[1m\u001b[96mhelp\u001b[0m: consider annotating `BenchmarkComparison` with `#[derive(Clone)]`",
+      "2026-11-10T13:03:43.4881193Z \u001b[1m\u001b[94m215\u001b[0m \u001b[1m\u001b[94m|\u001b[0m pub struct BenchmarkComparison {",
+      "2026-11-10T13:03:43.5752191Z \u001b[1mFor more information about this error, try `rustc --explain E0599`.\u001b[0m",
+      "2026-11-10T13:03:43.5753812Z \u001b[1m\u001b[91merror\u001b[0m: could not compile `llm-registry-benchmarks` (lib) due to 2 previous errors; 1 warning emitted",
+      "2026-11-10T13:03:44.3097280Z ##[error]Process completed with exit code 101."
+    ],
+    "129845705954": [
+      "2026-11-10T13:03:12.2763001Z \u001b[1m\u001b[92m   Compiling\u001b[0m thiserror v2.0.17",
+      "2026-11-10T13:03:17.3972997Z \u001b[1m\u001b[92m   Compiling\u001b[0m thiserror-impl v2.0.17",
+      "2026-11-10T13:03:45.8043168Z \u001b[1m\u001b[92m   Compiling\u001b[0m serde_path_to_error v0.1.20",
+      "2026-11-10T13:04:21.5723376Z \u001b[1m\u001b[91merror\u001b[0m\u001b[1m: environment variable `TARGET` not defined at compile time\u001b[0m",
+      "2026-11-10T13:04:21.5802628Z \u001b[1m\u001b[94m236\u001b[0m \u001b[1m\u001b[94m|\u001b[0m             target_triple: Some(env!(\"TARGET\").to_string()),",
+      "2026-11-10T13:04:21.5862688Z     \u001b[1m\u001b[94m= \u001b[0m\u001b[1mhelp\u001b[0m: `TARGET` may not be available for the current Cargo target",
+      "2026-11-10T13:04:21.5913617Z     \u001b[1m\u001b[94m= \u001b[0m\u001b[1mhelp\u001b[0m: Cargo sets build script variables at run time. Use `std::env::var(\"TARGET\")` instead",
+      "2026-11-10T13:04:21.6033170Z \u001b[1m\u001b[33mwarning\u001b[0m\u001b[1m: unused import: `BenchmarkComparison`\u001b[0m",
+      "2026-11-10T13:04:21.6077341Z \u001b[1m\u001b[94m7\u001b[0m \u001b[1m\u001b[94m|\u001b[0m use crate::io::{ComparisonSummary, BenchmarkComparison};",
+      "2026-11-10T13:04:21.7393617Z \u001b[1m\u001b[91merror[E0599]\u001b[0m\u001b[1m: the method `clone` exists for struct `Vec<BenchmarkComparison>`, but its trait bounds were not satisfied\u001b[0m",
+      "2026-11-10T13:04:21.7483074Z     \u001b[1m\u001b[94m|\u001b[0m                                                      \u001b[1m\u001b[91m^^^^^\u001b[0m \u001b[1m\u001b[91mmethod cannot be called on `Vec<BenchmarkComparison>` due to unsatisfied trait bounds\u001b[0m",
+      "2026-11-10T13:04:21.7572471Z \u001b[1m\u001b[94m214\u001b[0m \u001b[1m\u001b[94m|\u001b[0m pub struct BenchmarkComparison {",
+      "2026-11-10T13:04:21.7573647Z     \u001b[1m\u001b[94m|\u001b[0m \u001b[1m\u001b[94m------------------------------\u001b[0m \u001b[1m\u001b[94mdoesn't satisfy `BenchmarkComparison: Clone`\u001b[0m",
+      "2026-11-10T13:04:21.7575924Z             `BenchmarkComparison: Clone`",
+      "2026-11-10T13:04:21.7576552Z             which is required by `Vec<BenchmarkComparison>: Clone`",
+      "2026-11-10T13:04:21.7577568Z \u001b[1m\u001b[96mhelp\u001b[0m: consider annotating `BenchmarkComparison` with `#[derive(Clone)]`",
+      "2026-11-10T13:04:21.7581112Z \u001b[1m\u001b[94m215\u001b[0m \u001b[1m\u001b[94m|\u001b[0m pub struct BenchmarkComparison {",
+      "2026-11-10T13:04:21.9523237Z \u001b[1mFor more information about this error, try `rustc --explain E0599`.\u001b[0m",
+      "2026-11-10T13:04:21.9592047Z \u001b[1m\u001b[91merror\u001b[0m: could not compile `llm-registry-benchmarks` (lib) due to 2 previous errors; 1 warning emitted",
+      "2026-11-10T13:04:23.3537205Z ##[error]Process completed with exit code 101."
+    ]
+  },
+  "protection": {
+    "content": [
+      {
+        "type": "text",
+        "text": "GitHub API error 403: {\"message\":\"Resource not accessible by integration\",\"documentation_url\":\"https://docs.github.com/rest/branches/branch-protection#get-branch-protection\",\"status\":\"403\"}"
+      }
+    ],
+    "structuredContent": {
+      "error": "GitHub API error 403: {\"message\":\"Resource not accessible by integration\",\"documentation_url\":\"https://docs.github.com/rest/branches/branch-protection#get-branch-protection\",\"status\":\"403\"}",
+      "error_code": "FORBIDDEN",
+      "error_data": {
+        "message": "Resource not accessible by integration",
+        "documentation_url": "https://docs.github.com/rest/branches/branch-protection#get-branch-protection",
+        "status": "403"
+      }
+    },
+    "isError": true
+  }
+}

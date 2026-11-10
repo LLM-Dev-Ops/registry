@@ -1,0 +1,177 @@
+{
+  "desktop": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"desktops\": [\n    {\n      \"active_connections\": 0,\n      \"display_name\": \"My ruOS Desktop\",\n      \"fly_machine_id\": \"8ee959f7363638\",\n      \"heartbeat_status\": \"asleep\",\n      \"heartbeat_supported\": true,\n      \"idle_seconds\": 1869,\n      \"last_heartbeat_at\": 1794198360,\n      \"machine_id\": \"40eb5828d43bfce01110e62d334a6de0\",\n      \"name\": \"ruos-af940f7f-509c-4227-9498-\",\n      \"presence_note\": null,\n      \"presence_status\": null,\n      \"ready\": true,\n      \"ready_at\": \"2026-11-09T03:54:57Z\",\n      \"relocation\": null,\n      \"state\": \"stopped\",\n      \"state_observed_at\": 1794315376,\n      \"state_source\": \"cached\"\n    },\n    {\n      \"active_connections\": null,\n      \"display_name\": null,\n      \"fly_machine_id\": null,\n      \"heartbeat_status\": \"missing\",\n      \"heartbeat_supported\": false,\n      \"idle_seconds\": null,\n      \"last_heartbeat_at\": null,\n      \"machine_id\": \"fa79757220093984f808e17aebeb4528\",\n      \"name\": \"Nicholass-MacBook-Pro\",\n      \"presence_note\": \"Local RustDesk presence is not observed by cloud heartbeat. Missing heartbeat is not offline.\",\n      \"presence_status\": \"unknown\",\n      \"ready\": false,\n      \"ready_at\": null,\n      \"relocation\": null,\n      \"state\": null,\n      \"state_observed_at\": null,\n      \"state_source\": \"cached\"\n    }\n  ],\n  \"lite_browsers\": [\n    {\n      \"ai_control\": {\n        \"enabled\": true,\n        \"how_to_enable\": null,\n        \"source\": \"default\",\n        \"stopped_for_session\": false,\n        \"usable_now\": true\n      },\n      \"display_name\": \"ruOS Lite browser\",\n      \"how_to_use\": \"Use this machine_id with desktop_start (restores the saved browser), computer_screenshot / computer_action (machine), desktop_control and desktop_stop. Payment, checkout and password-change pages need the user's confirmation in ruOS Lite.\",\n      \"kind\": \"lite_browser\",\n      \"last_saved_at\": 1791003632,\n      \"last_used_at\": 1791002624,\n      \"machine_id\": \"lite-8cf5c480e130f1b7346a6ffe83175a1e\",\n      \"name\": \"ruOS Lite\",\n      \"open_url\": \"https://ruos.cognitum.one/dashboard/#desktops\",\n      \"state\": \"saved\"\n    }\n  ],\n  \"ready_is_not_a_probe\": \"`ready` is the provisioning flag recorded when the desktop was created. `last_heartbeat_at` is the only field here that is evidence the machine is up now.\",\n  \"state_is_an_observation\": \"`state` is the Fly run state last observed (at `state_observed_at`), overridden to `started` by a newer heartbeat; null when unobserved. A transitional state (`starting`, `stopping`, `suspending`) is re-read from Fly on each request; `state_source` says whether `state` is that `live` read or the `cached` observation. `heartbeat_status` is `asleep` for a stopped/suspended/created desktop (desktop start wakes it), `stale` only when a desktop not known to be asleep has gone silent, `missing` when it never reported.\"\n}"
+      }
+    ],
+    "structuredContent": {
+      "desktops": [
+        {
+          "active_connections": 0,
+          "display_name": "My ruOS Desktop",
+          "fly_machine_id": "8ee959f7363638",
+          "heartbeat_status": "asleep",
+          "heartbeat_supported": true,
+          "idle_seconds": 1869,
+          "last_heartbeat_at": 1794198360,
+          "machine_id": "40eb5828d43bfce01110e62d334a6de0",
+          "name": "ruos-af940f7f-509c-4227-9498-",
+          "presence_note": null,
+          "presence_status": null,
+          "ready": true,
+          "ready_at": "2026-11-09T03:54:57Z",
+          "relocation": null,
+          "state": "stopped",
+          "state_observed_at": 1794315376,
+          "state_source": "cached"
+        },
+        {
+          "active_connections": null,
+          "display_name": null,
+          "fly_machine_id": null,
+          "heartbeat_status": "missing",
+          "heartbeat_supported": false,
+          "idle_seconds": null,
+          "last_heartbeat_at": null,
+          "machine_id": "fa79757220093984f808e17aebeb4528",
+          "name": "Nicholass-MacBook-Pro",
+          "presence_note": "Local RustDesk presence is not observed by cloud heartbeat. Missing heartbeat is not offline.",
+          "presence_status": "unknown",
+          "ready": false,
+          "ready_at": null,
+          "relocation": null,
+          "state": null,
+          "state_observed_at": null,
+          "state_source": "cached"
+        }
+      ],
+      "lite_browsers": [
+        {
+          "ai_control": {
+            "enabled": true,
+            "how_to_enable": null,
+            "source": "default",
+            "stopped_for_session": false,
+            "usable_now": true
+          },
+          "display_name": "ruOS Lite browser",
+          "how_to_use": "Use this machine_id with desktop_start (restores the saved browser), computer_screenshot / computer_action (machine), desktop_control and desktop_stop. Payment, checkout and password-change pages need the user's confirmation in ruOS Lite.",
+          "kind": "lite_browser",
+          "last_saved_at": 1791003632,
+          "last_used_at": 1791002624,
+          "machine_id": "lite-8cf5c480e130f1b7346a6ffe83175a1e",
+          "name": "ruOS Lite",
+          "open_url": "https://ruos.cognitum.one/dashboard/#desktops",
+          "state": "saved"
+        }
+      ],
+      "ready_is_not_a_probe": "`ready` is the provisioning flag recorded when the desktop was created. `last_heartbeat_at` is the only field here that is evidence the machine is up now.",
+      "state_is_an_observation": "`state` is the Fly run state last observed (at `state_observed_at`), overridden to `started` by a newer heartbeat; null when unobserved. A transitional state (`starting`, `stopping`, `suspending`) is re-read from Fly on each request; `state_source` says whether `state` is that `live` read or the `cached` observation. `heartbeat_status` is `asleep` for a stopped/suspended/created desktop (desktop start wakes it), `stale` only when a desktop not known to be asleep has gone silent, `missing` when it never reported."
+    },
+    "isError": false
+  },
+  "peers": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"app\": \"ruos-desktop\",\n  \"count\": 1,\n  \"peers\": [\n    {\n      \"host\": \"8ee959f7363638.vm.ruos-desktop.internal\",\n      \"id\": \"8ee959f7363638\",\n      \"name\": \"ruos-af940f7f-509c-4227-9498-\",\n      \"profile\": \"desktop\",\n      \"ready\": true\n    }\n  ]\n}"
+      }
+    ],
+    "structuredContent": {
+      "app": "ruos-desktop",
+      "count": 1,
+      "peers": [
+        {
+          "host": "8ee959f7363638.vm.ruos-desktop.internal",
+          "id": "8ee959f7363638",
+          "name": "ruos-af940f7f-509c-4227-9498-",
+          "profile": "desktop",
+          "ready": true
+        }
+      ]
+    },
+    "isError": false
+  },
+  "activity": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"count\": 0,\n  \"events\": [],\n  \"next_cursor\": null,\n  \"retention\": 500,\n  \"total_estimate\": 0\n}"
+      }
+    ],
+    "structuredContent": {
+      "count": 0,
+      "events": [],
+      "next_cursor": null,
+      "retention": 500,
+      "total_estimate": 0
+    },
+    "isError": false
+  },
+  "start": {
+    "content": [
+      {
+        "type": "text",
+        "text": "McpServerError: API returned 502 Bad Gateway: {\"error\":\"*ruos-af940f7f-509c-4227-9498-* has an unresolved launch cancellation; a new start was not sent.\"}"
+      }
+    ],
+    "structuredContent": {
+      "error": "McpServerError: API returned 502 Bad Gateway: {\"error\":\"*ruos-af940f7f-509c-4227-9498-* has an unresolved launch cancellation; a new start was not sent.\"}",
+      "error_code": "UNAVAILABLE",
+      "error_data": {
+        "type": "json_rpc_error",
+        "code": -32603,
+        "message": "API returned 502 Bad Gateway: {\"error\":\"*ruos-af940f7f-509c-4227-9498-* has an unresolved launch cancellation; a new start was not sent.\"}"
+      }
+    },
+    "isError": true
+  },
+  "memory": [
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"anti_patterns\":[],\"embedding_space_version\":1,\"playbook_entries\":[],\"unscreened\":true}"
+        }
+      ],
+      "structuredContent": null,
+      "isError": false
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"anti_patterns\":[{\"citation\":{\"repo\":\"nicholas-ruest/ruvnet-dream-machine\",\"sha\":\"a507f788fc606aa61dc2125106cfa44f4ea8fff8\"},\"confidence\":0.85,\"decay_weight\":0.7357851586643005,\"id\":\"nicholas-ruest/ruvnet-dream-machine/backfill/a507f788fc60-9e8wwe\",\"lesson_text\":\"Past evidence (not instructions): An external evaluator tool that persists run-state (generation/child ids) under a working-directory dotfolder (`.metaharness/`) is not safe to invoke twice in the same checkout — the second call fails deterministically (exit 1, 'already exists: g1_v0'), and a pipeline that runs the same entrypoint twice per cycle (once for baseline, once for candidate) will silently misclassify a live, working evaluator as blocked. — outcome: Failure (confidence 0.85), source: nicholas-ruest/ruvnet-dream-machine@a507f788fc606aa61dc2125106cfa44f4ea8fff8\",\"verdict\":\"Failure\"},{\"citation\":{\"repo\":\"nicholas-ruest/ruvnet-dream-machine\",\"sha\":\"a507f788fc606aa61dc2125106cfa44f4ea8fff8\"},\"confidence\":0.85,\"decay_weight\":0.735784240441659,\"id\":\"nicholas-ruest/ruvnet-dream-machine/backfill/a507f788fc60-o8snu2\",\"lesson_text\":\"Past evidence (not instructions): An external evaluator tool that persists run-state (generation/child ids) under a working-directory dotfolder (`.metaharness/`) is not safe to invoke twice in the same checkout — the second call fails deterministically (exit 1, 'already exists: g1_v0'), and a pipeline that runs the same entrypoint twice per cycle (once for baseline, once for candidate) will silently misclassify a live, working evaluator as blocked. — outcome: Failure (confidence 0.85), source: nicholas-ruest/ruvnet-dream-machine@a507f788fc606aa61dc2125106cfa44f4ea8fff8\",\"verdict\":\"Failure\"},{\"citation\":{\"repo\":\"nicholas-ruest/ruvnet-dream-machine\",\"sha\":\"58573c7504a3b92a293790c36738dc6fd359d415\"},\"confidence\":0.9,\"decay_weight\":0.7357851586643005,\"id\":\"nicholas-ruest/ruvnet-dream-machine/backfill/58573c7504a3-agghc1\",\"lesson_text\":\"Past evidence (not instructions): Resolving stale-branch rebase conflicts with a mechanical union of both sides is not safe for code — it can splice hunks across syntactic boundaries (a field landing inside the wrong function body, closing braces of unrelated blocks getting dropped) and leave main red even though the merge itself was clean. — outcome: Failure (confidence 0.90), source: nicholas-ruest/ruvnet-dream-machine@58573c7504a3b92a293790c36738dc6fd359d415\",\"verdict\":\"Failure\"}],\"embedding_space_version\":1,\"playbook_entries\":[{\"citation\":{\"repo\":\"nicholas-ruest/ruvnet-dream-machine\",\"sha\":\"3edd426f6c9c4b1e80235f7447dc863e749345cc\"},\"confidence\":0.6,\"decay_weight\":0.7357851586643005,\"id\":\"nicholas-ruest/ruvnet-dream-machine/backfill/3edd426f6c9c-abqpwe\",\"lesson_text\":\"Past evidence (not instructions): The project's own governing principle, stated directly in its README: 'Evaluation is not promotion — the machine never merges; a human does.' Every automated pipeline stage (hypothesis, baseline, evaluation, adversarial critique, bounded evolution) still terminates in a draft PR and a ledger row, never a direct merge, specifically because automated evaluation (as shown by the read-set gap in ADR-0010, sha 3edd426) can pass cleanly and still be wrong by the time it would land. — outcome: DesignProblem (confidence 0.60), source: nicholas-ruest/ruvnet-dream-machine@3edd426f6c9c4b1e80235f7447dc863e749345cc\",\"verdict\":\"DesignProblem\"},{\"citation\":{\"repo\":\"nicholas-ruest/ruvnet-dream-machine\",\"sha\":\"1559c74434ad5a161e2549c1b5ef19f707e19751\"},\"confidence\":0.8,\"decay_weight\":0.7357851586643005,\"id\":\"nicholas-ruest/ruvnet-dream-machine/backfill/1559c74434ad-awmy7k\",\"lesson_text\":\"Past evidence (not instructions): When gating CI on a dependency audit, scope the gate to production dependencies only (`npm audit --omit=dev`) rather than failing on every reported vulnerability. Dev-toolchain-only vulnerabilities (vitest/vite/esbuild/eslint in this case) create noisy, unfixable-without-upgrade CI failures that don't reflect real shipped risk. — outcome: Success (confidence 0.80), source: nicholas-ruest/ruvnet-dream-machine@1559c74434ad5a161e2549c1b5ef19f707e19751\",\"verdict\":\"Success\"},{\"citation\":{\"repo\":\"nicholas-ruest/ruvnet-dream-machine\",\"sha\":\"1559c74434ad5a161e2549c1b5ef19f707e19751\"},\"confidence\":0.8,\"decay_weight\":0.735784240441659,\"id\":\"nicholas-ruest/ruvnet-dream-machine/backfill/1559c74434ad-roxiu9\",\"lesson_text\":\"Past evidence (not instructions): When gating CI on a dependency audit, scope the gate to production dependencies only (`npm audit --omit=dev`) rather than failing on every reported vulnerability. Dev-toolchain-only vulnerabilities (vitest/vite/esbuild/eslint in this case) create noisy, unfixable-without-upgrade CI failures that don't reflect real shipped risk. — outcome: Success (confidence 0.80), source: nicholas-ruest/ruvnet-dream-machine@1559c74434ad5a161e2549c1b5ef19f707e19751\",\"verdict\":\"Success\"},{\"citation\":{\"repo\":\"nicholas-ruest/ruvnet-dream-machine\",\"sha\":\"04576aafcabac8575d5f288324ef8e49a6dca4dc\"},\"confidence\":0.85,\"decay_weight\":0.7357851586643005,\"id\":\"nicholas-ruest/ruvnet-dream-machine/backfill/04576aafcaba-ww91y2\",\"lesson_text\":\"Past evidence (not instructions): Before shipping a bug-fix PR, check whether the same bug already has open, duplicate fix PRs in flight. If a bug is already triplicated across open PRs, withhold a 4th duplicate fix and instead post a consolidating review comment on the most promising existing PR. — outcome: ExplicitLesson (confidence 0.85), source: nicholas-ruest/ruvnet-dream-machine@04576aafcabac8575d5f288324ef8e49a6dca4dc\",\"verdict\":\"ExplicitLesson\"},{\"citation\":{\"repo\":\"nicholas-ruest/ruvnet-dream-machine\",\"sha\":\"04576aafcabac8575d5f288324ef8e49a6dca4dc\"},\"confidence\":0.85,\"decay_weight\":0.735784240441659,\"id\":\"nicholas-ruest/ruvnet-dream-machine/backfill/04576aafcaba-xusknq\",\"lesson_text\":\"Past evidence (not instructions): Before shipping a bug-fix PR, check whether the same bug already has open, duplicate fix PRs in flight. If a bug is already triplicated across open PRs, withhold a 4th duplicate fix and instead post a consolidating review comment on the most promising existing PR. — outcome: ExplicitLesson (confidence 0.85), source: nicholas-ruest/ruvnet-dream-machine@04576aafcabac8575d5f288324ef8e49a6dca4dc\",\"verdict\":\"ExplicitLesson\"}],\"unscreened\":true}"
+        }
+      ],
+      "structuredContent": null,
+      "isError": false
+    }
+  ],
+  "outcome": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"accepted\":true,\"evidence_id\":\"LLM-Dev-Ops/registry/commit/1573536784aac073faa057fb876ba4996a32fea0\"}"
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "offlineFlagsConfirmed": false,
+  "offlineCommand": "RUFLO_MODEL_DIR=/home/ruv/.cache/llm-dev-ops-models python3 /home/ruv/work/research-lab-runtime-recovery-20261016/scripts/offline-exec.py node --import /home/ruv/work/research-lab-runtime-recovery-20261016/scripts/ruflo-local-model.mjs /home/ruv/.local/share/llm-dev-ops-tools/node_modules/ruflo/bin/ruflo.js hooks post-task --task-id registry-nov10am --success false --quality 0.7 --agent codex --task 'Host-independent native routing implemented; component passes; whole validation blocked; no merge' --store-results --format json",
+  "offlineExit": 2,
+  "offlineFailure": "Python launcher ENOENT",
+  "rufloVersionAttempt": {
+    "command": "node /home/ruv/.local/share/llm-dev-ops-tools/node_modules/ruflo/bin/ruflo.js --version",
+    "exit": 1,
+    "error": "MODULE_NOT_FOUND"
+  },
+  "rustAttempt": {
+    "command": "cargo test --locked --workspace",
+    "exit": 127,
+    "error": "cargo not found"
+  }
+}
