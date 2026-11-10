@@ -86,7 +86,8 @@ function sendJson(res: Response, statusCode: number, body: unknown): void {
 }
 
 function getRequestPath(req: Request): string {
-  return req.path || new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`).pathname;
+  // Routing needs only the pathname; an untrusted Host is not a URL base.
+  return req.path || new URL(req.url || '/', 'http://localhost').pathname;
 }
 
 function schemaTypeMatches(value: unknown, type: JsonSchema['type']): boolean {

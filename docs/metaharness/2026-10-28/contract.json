@@ -1,0 +1,13 @@
+{
+  "task": "registry-oct28b",
+  "baselineProduction": "ddede4cd93b0da9f003b2d90f91e33066877cae4",
+  "baselineFixtures": "827b82917765b38b36d86723f10f2f5f9ce061bf",
+  "objective": "Canonical dependency-first ordering and cycle diagnostics independent of graph insertion order",
+  "holdouts": 2,
+  "anchors": 5,
+  "acceptance": ["2/2 holdouts", "5/5 anchors", "all 89 existing core tests retained", "all 92 candidate core tests pass", "full workspace, strict Clippy, Rust audit and Node build/test/typecheck exit zero", "exact-head CI and required approvals before merge"],
+  "budgetsSeconds": {"core": 60, "workspace": 180, "clippy": 60, "audit": 30, "nodeEach": 30},
+  "baselineCandidateParity": "same fixtures, dependency resolution and commands",
+  "failedGates": "fail closed, including inherited failures",
+  "notClaimed": ["latency optimization", "full business-service functionality from adapter tests", "Darwin score as implementation proof"]
+}
